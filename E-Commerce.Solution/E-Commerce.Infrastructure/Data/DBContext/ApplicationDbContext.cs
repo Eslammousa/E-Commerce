@@ -5,9 +5,8 @@ namespace E_Commerce.Infrastructure.Data.DBContext
 {
     public class ApplicationDbContext : DbContext
     {
-        public class AppDbContext : DbContext
-        {
-            public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+      
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
             public DbSet<Product> products { get; set; }
             public DbSet<Category> categories { get; set; }
@@ -15,10 +14,10 @@ namespace E_Commerce.Infrastructure.Data.DBContext
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
                 base.OnModelCreating(modelBuilder);
-                modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+                modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
             }
 
-        }
+        
     }
 }

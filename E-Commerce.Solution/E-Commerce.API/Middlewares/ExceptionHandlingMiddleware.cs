@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E_Commerce.Core.Exceptions;
+using System;
 using System.Text.Json;
 
 namespace E_Commerce.API.Middlewares
@@ -70,4 +71,4 @@ namespace E_Commerce.API.Middlewares
         }
     }
 }
-}
+
