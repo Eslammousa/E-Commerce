@@ -41,6 +41,7 @@ namespace E_Commerce.API.Middlewares
             {
                 InvalidIdException => StatusCodes.Status400BadRequest,
                 RequestEmptyException => StatusCodes.Status400BadRequest,
+                DuplicateEntityException => StatusCodes.Status409Conflict,
                 EntityNotFoundException => StatusCodes.Status404NotFound,
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError

@@ -53,5 +53,10 @@ namespace E_Commerce.Infrastructure.Repositories
             return existingCategory;
 
         }
+
+        public async Task<Category?> GetCategoryByCategoryName(string name)
+        {
+           return await _db.categories.FirstOrDefaultAsync(x => x.Name == name);
+        }
     }
 }

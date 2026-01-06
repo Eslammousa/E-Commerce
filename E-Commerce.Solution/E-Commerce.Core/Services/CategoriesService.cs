@@ -24,6 +24,9 @@ namespace E_Commerce.Core.Services
             var categoryEntity = _mapper.Map<Category>(categoryAddRquest);
             categoryEntity.Id = Guid.NewGuid();
 
+            var existingCategory = await _categoryRepository.GetCategoryByCategoryName(categoryEntity.Name);
+            if (existingCategory != null) throw new DuplicateEntityException($"Category with name '{categoryEntity.Name}' already exists.");
+            
             // call repository method to add category
             var addedCategory = await _categoryRepository.AddCategory(categoryEntity);
 
@@ -41,7 +44,7 @@ namespace E_Commerce.Core.Services
         }
         public async Task<CategoryResponse> GetCategoryById(Guid categoryId)
         {
-            if (categoryId == Guid.Empty) throw new InvalidIdException("Id Can't be Empty");
+            if (categoryId == Guid.Empty) throw new InvalidIdException($"Id {categoryId} Can't be Empty");
 
             var category = await _categoryRepository.GetCategoryById(categoryId);
 
@@ -52,22 +55,23 @@ namespace E_Commerce.Core.Services
 
         public async Task<CategoryResponse> UpdateCategory(Guid categoryId , CategoryUpdateRequest categoryUpdateRequest)
         {
-            if (categoryId == Guid.Empty) throw new InvalidIdException("Id Can't be Empty");
+            if (categoryId == Guid.Empty) throw new InvalidIdException($"Id {categoryId} Can't be Empty");
             //   categoryUpdateRequest.Id = categoryId;
             // convert categoryUpdateRequest to Category 
             var categoryEntity = _mapper.Map<Category>(categoryUpdateRequest);
             categoryEntity.Id = categoryId;
+
             // call repository method to add category
             var updateCategory = await _categoryRepository.UpdateCategory(categoryEntity);
 
-            if (updateCategory is null) throw new EntityNotFoundException($"Category not found");
+            if (updateCategory is null) throw new EntityNotFoundException($"Category with id {updateCategory} not found");
             // convert added Category to CategoryResponse 
             return _mapper.Map<CategoryResponse>(updateCategory);
         }
 
         public async Task<bool> DeleteCategoryById(Guid categoryId)
         {
-            if (categoryId == Guid.Empty) throw new InvalidIdException("Id Can't be Empty");
+            if (categoryId == Guid.Empty) throw new InvalidIdException($"Id {categoryId} Can't be Empty");
 
             var result = await _categoryRepository.DeleteCategoryById(categoryId);
 

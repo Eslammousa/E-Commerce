@@ -4,14 +4,16 @@ namespace E_Commerce.Core.Domain.RepositoryContracts
 {
     public interface ICategoryRepository
     {
-         Task<Category> AddCategory(Category category);
+        Task<Category> AddCategory(Category category);
 
-         Task<Category?> UpdateCategory(Category category);
+        Task<Category?> UpdateCategory(Category category);
 
-         Task<bool> DeleteCategoryById(Guid categoryId );
+        Task<bool> DeleteCategoryById(Guid categoryId);
+        Task<Category?> GetCategoryById(Guid categoryId);
 
-         Task<Category?> GetCategoryById(Guid categoryId);
+        Task<IEnumerable<Category>> GetAllCategories();
 
-         Task<IEnumerable<Category>> GetAllCategories();
+        public Task<Category?> GetCategoryByCategoryName(string name);
+
     }
 }
