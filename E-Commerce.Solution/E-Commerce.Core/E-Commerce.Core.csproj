@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Domain\Enums\" />
     <Folder Include="Domain\IdentityEntities\" />
-    <Folder Include="Domain\RepositoryContracts\" />
     <Folder Include="DTO\" />
     <Folder Include="Helpers\" />
     <Folder Include="Services\" />
