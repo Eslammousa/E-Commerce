@@ -10,10 +10,10 @@
   <ItemGroup>
     <Folder Include="Domain\Enums\" />
     <Folder Include="Domain\IdentityEntities\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Services\" />
-    <Folder Include="ServicesContracts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
   </ItemGroup>
 
 </Project>

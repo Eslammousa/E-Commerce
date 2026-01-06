@@ -1,4 +1,4 @@
-﻿namespace E_Commerce.Core.DTO
+﻿namespace E_Commerce.Core.DTO.CategoryDTO
 {
     public class CategoryResponse
     {

@@ -22,7 +22,9 @@ namespace E_Commerce.Infrastructure.Repositories
 
         public async Task<bool> DeleteCategoryById(Guid categoryId)
         {
-            _db.categories.RemoveRange(_db.categories.Where(temp => temp.Id == categoryId));
+            var category = await GetCategoryById(categoryId);
+            if (category == null) return false;
+            _db.categories.Remove(category);
             int rowsDeleted = await _db.SaveChangesAsync();
             return rowsDeleted > 0;
 
@@ -33,14 +35,16 @@ namespace E_Commerce.Infrastructure.Repositories
             return await _db.categories.ToListAsync();
         }
 
-        public async Task<Category> GetCategoryById(Guid categoryId)
+        public async Task<Category?> GetCategoryById(Guid categoryId)
         {
-          return await _db.categories.FirstOrDefaultAsync(x=>x.Id == categoryId);
+            return await _db.categories.FirstOrDefaultAsync(x => x.Id == categoryId);
+
         }
 
-        public async Task<Category> UpdateCategory(Category category)
+        public async Task<Category?> UpdateCategory(Category category)
         {
             var existingCategory = await GetCategoryById(category.Id);
+            if (existingCategory == null) return null;
 
             existingCategory.Name = category.Name;
             existingCategory.Description = category.Description;

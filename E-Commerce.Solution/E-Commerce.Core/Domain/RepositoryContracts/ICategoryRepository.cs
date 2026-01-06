@@ -6,11 +6,11 @@ namespace E_Commerce.Core.Domain.RepositoryContracts
     {
          Task<Category> AddCategory(Category category);
 
-         Task<Category> UpdateCategory(Category category);
+         Task<Category?> UpdateCategory(Category category);
 
          Task<bool> DeleteCategoryById(Guid categoryId );
 
-         Task<Category> GetCategoryById(Guid categoryId);
+         Task<Category?> GetCategoryById(Guid categoryId);
 
          Task<IEnumerable<Category>> GetAllCategories();
     }

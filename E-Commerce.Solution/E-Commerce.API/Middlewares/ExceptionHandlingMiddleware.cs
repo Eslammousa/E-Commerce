@@ -1,5 +1,4 @@
 ﻿using E_Commerce.Core.Exceptions;
-using System;
 using System.Text.Json;
 
 namespace E_Commerce.API.Middlewares
@@ -9,23 +8,28 @@ namespace E_Commerce.API.Middlewares
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        public ExceptionHandlingMiddleware(
+            RequestDelegate next,
+            ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
             _logger = logger;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext context)
         {
             try
             {
-                await _next(httpContext);
+                await _next(context);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
 
-                await HandleExceptionAsync(httpContext, ex);
+                if (context.Response.HasStarted)
+                    throw;
+
+                await HandleExceptionAsync(context, ex);
             }
         }
 
@@ -38,14 +42,16 @@ namespace E_Commerce.API.Middlewares
                 InvalidIdException => StatusCodes.Status400BadRequest,
                 RequestEmptyException => StatusCodes.Status400BadRequest,
                 EntityNotFoundException => StatusCodes.Status404NotFound,
-                unauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };
 
             var response = new ErrorResponse
             {
                 StatusCode = context.Response.StatusCode,
-                Message = ex.Message
+                Message = context.Response.StatusCode == StatusCodes.Status500InternalServerError
+                    ? "An unexpected error occurred"
+                    : ex.Message
             };
 
             var json = JsonSerializer.Serialize(response);
@@ -54,7 +60,7 @@ namespace E_Commerce.API.Middlewares
         }
     }
 
-    // DTO للـ Error Response
+    // Error Response DTO
     public class ErrorResponse
     {
         public int StatusCode { get; set; }
@@ -71,4 +77,3 @@ namespace E_Commerce.API.Middlewares
         }
     }
 }
-
