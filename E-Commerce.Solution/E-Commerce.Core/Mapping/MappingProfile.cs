@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.DTO.CategoryDTO;
+using E_Commerce.Core.DTO.ProductDTO;
 
 namespace E_Commerce.Core.Mapping
 {
@@ -10,18 +11,21 @@ namespace E_Commerce.Core.Mapping
         {
             // Mapping AddRequestCategory to Person
             CreateMap<CategoryAddRequest, Category>();
-           //.ForMember(
-           //    dest => dest.Id,
-           //    src => src.MapFrom(src => Guid.NewGuid())
-           //);
+
             // Mapping UpdateRequestCategory to Person
             CreateMap<CategoryUpdateRequest, Category>();
 
             // Mapping Id == gg // Convert Person to PersonDTO
-            CreateMap<Category, CategoryResponse>();//.ForMember(
-           //    dest => dest.gg,
-           //    src => src.MapFrom(src => src.Id)
-           //);
+            CreateMap<Category, CategoryResponse>();
+
+
+            CreateMap<ProductAddRequest, Product>();
+            CreateMap<ProudctUpdateRequest, Product>();
+
+            CreateMap<Product, ProductResponse>()
+             .ForMember( d => d.CategoryName,
+                       opt => opt.MapFrom(src => src.Category.Name));
+
         }
     }
 }

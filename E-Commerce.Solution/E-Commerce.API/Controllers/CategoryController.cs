@@ -20,7 +20,14 @@ namespace E_Commerce.API.Controllers
             var result =  await _categoriesService.GetAllCategories();
             return Ok(result);
         }
-            
+
+        [HttpGet("{categoryId:guid}")]
+        public async Task<ActionResult> GetCategoryById(Guid categoryId)
+        { 
+            return Ok(await _categoriesService.GetCategoryById(categoryId));
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> AddCategory(CategoryAddRequest categoryAddRequest)
         {

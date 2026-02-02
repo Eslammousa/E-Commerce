@@ -29,7 +29,7 @@ namespace E_Commerce.Infrastructure.Data.Config
                 .HasColumnType("INT")
                 .IsRequired();
 
-            builder.Property(p => p.ImageUrl)
+            builder.Property(p => p.Image)
                 .HasColumnType("nvarchar")
                 .HasMaxLength(500)
                 .IsRequired();

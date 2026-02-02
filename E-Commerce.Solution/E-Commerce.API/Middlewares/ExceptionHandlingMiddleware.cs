@@ -43,6 +43,8 @@ namespace E_Commerce.API.Middlewares
                 RequestEmptyException => StatusCodes.Status400BadRequest,
                 DuplicateEntityException => StatusCodes.Status409Conflict,
                 EntityNotFoundException => StatusCodes.Status404NotFound,
+                InvalidImageTypeException => StatusCodes.Status415UnsupportedMediaType,
+                ImageSizeExceededException => StatusCodes.Status413PayloadTooLarge,
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };
