@@ -1,4 +1,5 @@
-﻿using E_Commerce.Core.ServicesContracts;
+﻿using E_Commerce.Core.Services;
+using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,40 +13,34 @@ namespace E_Commerce.API.Controllers
     {
         private readonly IOrderService _orderService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService )
         {
             _orderService = orderService;
+            
         }
 
         [HttpPost("checkout")]
         public async Task<IActionResult> CheckOut()
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-            var result = await _orderService.Checkout(userId);
-
+          
+            var result = await _orderService.Checkout();
             return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var orders = await _orderService.GetOrderById(userId);
+          
+            var orders = await _orderService.GetOrderById();
             return Ok(orders);
         }
 
         [HttpGet("{orderId:guid}")]
         public async Task<IActionResult> GetOrderDetails(Guid orderId)
         {
-            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+          
 
-            if (string.IsNullOrEmpty(userIdClaim))
-                return Unauthorized();
-
-            var userId = Guid.Parse(userIdClaim);
-
-            var result = await _orderService.GetOrderDetails(orderId , userId);
+            var result = await _orderService.GetOrderDetails(orderId);
 
             return Ok(result);
         }

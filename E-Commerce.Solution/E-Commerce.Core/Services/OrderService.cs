@@ -16,9 +16,11 @@ namespace E_Commerce.Core.Services
         private readonly IGenericRepository<CartItem> _cartItemRepo;
         private readonly ICartRepositroy _cartRepository;
         private readonly IOrderRepository _orderRepo;
+        private readonly ICurrentUserService _currentUser;
+
 
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepository<Order> orderRepository,
-            ICartRepositroy cartRepositroy, IGenericRepository<CartItem> cartItemRepo, IOrderRepository orderRepo)
+            ICartRepositroy cartRepositroy, IGenericRepository<CartItem> cartItemRepo, IOrderRepository orderRepo, ICurrentUserService currentUser)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -26,9 +28,11 @@ namespace E_Commerce.Core.Services
             _cartRepository = cartRepositroy;
             _cartItemRepo = cartItemRepo;
             _orderRepo = orderRepo;
+            _currentUser = currentUser;
         }
-        public async Task<OrderResponse> Checkout(Guid userId)
+        public async Task<OrderResponse> Checkout( )
         {
+            var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("UserId cannot be empty.");
 
             var cart = await _cartRepository.GetCartWithItemsAsync(userId);
@@ -81,9 +85,10 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<OrderResponse>(order);
         }
 
-        public async Task<List<OrderResponse>> GetOrderById(Guid userId)
+        public async Task<List<OrderResponse>> GetOrderById()
         {
-           if (userId == Guid.Empty) throw new InvalidIdException("OrderId cannot be empty.");
+            var userId = _currentUser.UserId;
+            if (userId == Guid.Empty) throw new InvalidIdException("OrderId cannot be empty.");
            var order = await _orderRepo.GetOrderByUserIdAsync(userId);
 
             if (order == null) throw new EntityNotFoundException("Order not found.");
@@ -91,8 +96,9 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<List<OrderResponse>>(order);
         }
 
-        public async Task<OrderResponse> GetOrderDetails(Guid orderId , Guid userId)
+        public async Task<OrderResponse> GetOrderDetails(Guid orderId)
         {
+            var userId = _currentUser.UserId;
             if (userId == Guid.Empty || orderId == Guid.Empty)
                 throw new ArgumentException("Invalid id");
 

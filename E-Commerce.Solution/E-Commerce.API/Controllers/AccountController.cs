@@ -2,7 +2,6 @@
 using E_Commerce.Core.DTO.IdentityDTO;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

@@ -7,6 +7,7 @@ using E_Commerce.Core.Services;
 using E_Commerce.Core.ServicesContracts;
 using E_Commerce.Infrastructure.Data.DBContext;
 using E_Commerce.Infrastructure.Repositories;
+using E_Commerce.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,7 +42,8 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
 
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
