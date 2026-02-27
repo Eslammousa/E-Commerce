@@ -1,11 +1,6 @@
 ﻿using E_Commerce.Core.Domain.IdentityEntities;
 using E_Commerce.Core.DTO.IdentityDTO;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace E_Commerce.Core.Services
 {
@@ -29,9 +24,9 @@ namespace E_Commerce.Core.Services
                 }
             }
 
+
             // ===== Create Admin =====
-            var adminEmail = "admin@example.com";
-            var admin = await userManager.FindByEmailAsync(adminEmail);
+            var adminEmail = "admin@example.com"; var admin = await userManager.FindByEmailAsync(adminEmail);
 
             if (admin == null)
             {

@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Core.Exceptions;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace E_Commerce.API.Middlewares
 {
@@ -24,10 +25,13 @@ namespace E_Commerce.API.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-
                 if (context.Response.HasStarted)
                     throw;
+
+                _logger.LogError(
+                    ex,
+                    "Unhandled exception occurred. TraceId: {TraceId}",
+                    context.TraceIdentifier);
 
                 await HandleExceptionAsync(context, ex);
             }
@@ -39,13 +43,28 @@ namespace E_Commerce.API.Middlewares
 
             context.Response.StatusCode = ex switch
             {
+                // 400 - Bad Request
                 InvalidIdException => StatusCodes.Status400BadRequest,
                 RequestEmptyException => StatusCodes.Status400BadRequest,
+                InvalidQuantityException => StatusCodes.Status400BadRequest,
+
+                // 409 - Conflict
+                InsufficientStockException => StatusCodes.Status409Conflict,
                 DuplicateEntityException => StatusCodes.Status409Conflict,
+
+                // 404 - Not Found
                 EntityNotFoundException => StatusCodes.Status404NotFound,
-                InvalidImageTypeException => StatusCodes.Status415UnsupportedMediaType,
-                ImageSizeExceededException => StatusCodes.Status413PayloadTooLarge,
+
+                // 401 - Unauthorized
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+
+                // 415 - Unsupported Media Type
+                InvalidImageTypeException => StatusCodes.Status415UnsupportedMediaType,
+
+                // 413 - Payload Too Large
+                ImageSizeExceededException => StatusCodes.Status413PayloadTooLarge,
+
+                // 500 - Internal Server Error
                 _ => StatusCodes.Status500InternalServerError
             };
 
@@ -54,12 +73,11 @@ namespace E_Commerce.API.Middlewares
                 StatusCode = context.Response.StatusCode,
                 Message = context.Response.StatusCode == StatusCodes.Status500InternalServerError
                     ? "An unexpected error occurred"
-                    : ex.Message
+                    : ex.Message,
+                TraceId = context.TraceIdentifier
             };
 
-            var json = JsonSerializer.Serialize(response);
-
-            return context.Response.WriteAsync(json);
+            return context.Response.WriteAsJsonAsync(response);
         }
     }
 
@@ -68,6 +86,7 @@ namespace E_Commerce.API.Middlewares
     {
         public int StatusCode { get; set; }
         public string Message { get; set; } = string.Empty;
+        public string? TraceId { get; set; }
     }
 
     // Extension Method

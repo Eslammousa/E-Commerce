@@ -17,7 +17,7 @@ namespace E_Commerce.Infrastructure.Repositories
         }
         public async Task<T> AddAsync(T Object)
         {
-           await _dbSet.AddAsync(Object);
+            await _dbSet.AddAsync(Object);
             return Object;
         }
 
@@ -40,7 +40,7 @@ namespace E_Commerce.Infrastructure.Repositories
                 foreach (var include in includes)
                     query = query.Include(include);
 
-            return await _dbSet.FirstOrDefaultAsync(match);
+            return await query.FirstOrDefaultAsync(match);
         }
 
         public async Task<IEnumerable<T>> WhereAsync(Expression<Func<T, bool>> match, params Expression<Func<T, object>>[] includes)
@@ -51,7 +51,7 @@ namespace E_Commerce.Infrastructure.Repositories
                 foreach (var include in includes)
                     query = query.Include(include);
 
-            return await _dbSet.Where(match).ToListAsync();
+            return await query.Where(match).ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)

@@ -1,11 +1,13 @@
 ﻿using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.DTO.ProductDTO;
 using E_Commerce.Core.ServicesContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -14,6 +16,7 @@ namespace E_Commerce.API.Controllers
         {
             _productsService = productsService;
         }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult> AddProduct([FromForm] ProductAddRequest productAddRequest)
@@ -32,7 +35,7 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetALlProudct()
+        public async Task<ActionResult> GetAllProudct()
         {
             return Ok( await _productsService.GetAllProudcts());
         }
@@ -48,7 +51,6 @@ namespace E_Commerce.API.Controllers
         {
             return Ok(await _productsService.GetProductByProductId(ProudctId));
         }
-
 
         [HttpPut]
         public async Task<ActionResult> UpdateProduct(Guid Id ,ProudctUpdateRequest proudctUpdateRequest)

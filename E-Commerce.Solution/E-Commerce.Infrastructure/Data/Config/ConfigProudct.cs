@@ -38,6 +38,8 @@ namespace E_Commerce.Infrastructure.Data.Config
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+           
         }
     }
 }

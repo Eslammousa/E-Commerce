@@ -5,14 +5,14 @@ namespace E_Commerce.Core.Services
 {
     public class BaseService
     {
-        protected readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly IHttpContextAccessor _httpContextAccessor;
 
         public BaseService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected Guid GetCurrentUserId()
+        public Guid GetCurrentUserId()
         {
             var userId = _httpContextAccessor.HttpContext?
                 .User

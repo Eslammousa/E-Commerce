@@ -32,6 +32,18 @@ builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
 builder.Services.AddScoped<IProductsService, ProductsService>();
 
+builder.Services.AddScoped<ICartRepositroy, CartRepository>();
+
+builder.Services.AddScoped<ICartService, CartService>();
+
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+
+
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));

@@ -15,9 +15,9 @@ namespace E_Commerce.Infrastructure.Data.Config
                    .HasDefaultValueSql("GETUTCDATE()");
 
             builder.HasOne(c => c.User)
-                   .WithMany(u => u.Carts)
-                   .HasForeignKey(c => c.UserId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .WithOne(u => u.Carts)
+                     .HasForeignKey<Cart>(c => c.UserId)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

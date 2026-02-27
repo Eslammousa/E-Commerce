@@ -61,8 +61,8 @@ namespace E_Commerce.API.Controllers
 
 
         [HttpPost("login")]
-        //[Authorize("NotAuthorized")]
-        [AllowAnonymous]
+        [Authorize("NotAuthorized")]
+        //[AllowAnonymous]
         public async Task<ActionResult> PostLogin(LoginDTO loginDTO)
         {
 

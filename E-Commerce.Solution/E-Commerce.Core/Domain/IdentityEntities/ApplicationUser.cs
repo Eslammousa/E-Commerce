@@ -13,6 +13,8 @@ namespace E_Commerce.Core.Domain.IdentityEntities
 
         public DateTime? RefreshTokenExpirationDateTime { get; set; }
 
-        public ICollection<Cart> Carts { get; set; } = new List<Cart>(); 
+        public Cart Carts { get; set; } = null!;
+
+       public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

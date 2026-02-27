@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Core.DTO.CategoryDTO;
 using E_Commerce.Core.ServicesContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.API.Controllers
@@ -14,6 +15,7 @@ namespace E_Commerce.API.Controllers
             _categoriesService = categoriesService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetAllCategories()
         {
@@ -21,13 +23,14 @@ namespace E_Commerce.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{categoryId:guid}")]
         public async Task<ActionResult> GetCategoryById(Guid categoryId)
         { 
             return Ok(await _categoriesService.GetCategoryById(categoryId));
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> AddCategory(CategoryAddRequest categoryAddRequest)
         {
@@ -44,6 +47,7 @@ namespace E_Commerce.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{categoryId:guid}")]
         public async Task<ActionResult> DeleteCategoryById(Guid categoryId)
         {
