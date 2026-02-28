@@ -7,5 +7,8 @@ namespace E_Commerce.Core.Domain.RepositoryContracts
         Task<List<Order>> GetOrderByUserIdAsync(Guid userId);
 
         Task<Order?> GetOrderDetailsAsync(Guid orderId , Guid userId);
+
+        Task<List<Order>> GetAllOrdersAsync();
+        public Task<Order?> GetOrderByIdAsync(Guid orderId);
     }
 }

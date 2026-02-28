@@ -12,6 +12,16 @@ namespace E_Commerce.Infrastructure.Repositories
         {
             _db = db;
         }
+
+        public async Task<List<Order>> GetAllOrdersAsync()
+        {
+            return await _db.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task<List<Order>> GetOrderByUserIdAsync(Guid userId)
         {
             return await _db.Orders
@@ -30,5 +40,14 @@ namespace E_Commerce.Infrastructure.Repositories
                 .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync();
         }
+        public async Task<Order?> GetOrderByIdAsync(Guid orderId)
+        {
+            return await _db.Orders
+                .Where(o => o.Id == orderId)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

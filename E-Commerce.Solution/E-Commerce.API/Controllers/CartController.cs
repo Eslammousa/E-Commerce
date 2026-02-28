@@ -22,9 +22,9 @@ namespace E_Commerce.API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddToCart([FromBody] CartAddRequest request)
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+           
 
-            var result = await _cartService.AddCart(userId, request);
+            var result = await _cartService.AddCart(request);
 
             return Ok(result);
         }
@@ -32,9 +32,9 @@ namespace E_Commerce.API.Controllers
         [HttpGet]
         public async Task<ActionResult> GetCart()
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+           
 
-            var result = await _cartService.GetCartByUserId(userId);
+            var result = await _cartService.GetCartByUserId();
 
             return Ok(result);
         }
@@ -42,9 +42,8 @@ namespace E_Commerce.API.Controllers
         [HttpDelete("{cartItemId:guid}")]
         public async Task<ActionResult> DeleteCartItem(Guid cartItemId)
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            await _cartService.RemoveFromCart(userId, cartItemId);
+            await _cartService.RemoveFromCart(cartItemId);
 
             return NoContent();
         }
@@ -52,9 +51,9 @@ namespace E_Commerce.API.Controllers
         [HttpPut("{cartItemId:guid}")]
         public async Task<ActionResult> UpdateCartItem(Guid cartItemId, [FromBody] UpdateCartItemRequest request)
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+         
 
-            var result = await _cartService.EditCartItem(userId, cartItemId, request.Quantity);
+            var result = await _cartService.EditCartItem(cartItemId, request.Quantity);
 
             return Ok(result);
         }

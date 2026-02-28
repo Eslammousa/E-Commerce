@@ -3,7 +3,6 @@
     public enum StatusOrder
     {
         Pending,
-        Processing,
         Shipped,
         Delivered,
         Cancelled

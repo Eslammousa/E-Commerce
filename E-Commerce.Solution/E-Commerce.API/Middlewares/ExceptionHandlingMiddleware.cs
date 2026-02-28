@@ -47,7 +47,7 @@ namespace E_Commerce.API.Middlewares
                 InvalidIdException => StatusCodes.Status400BadRequest,
                 RequestEmptyException => StatusCodes.Status400BadRequest,
                 InvalidQuantityException => StatusCodes.Status400BadRequest,
-
+                InvalidOperationException => StatusCodes.Status400BadRequest,
                 // 409 - Conflict
                 InsufficientStockException => StatusCodes.Status409Conflict,
                 DuplicateEntityException => StatusCodes.Status409Conflict,

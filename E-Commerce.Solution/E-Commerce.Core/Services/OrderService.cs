@@ -30,7 +30,34 @@ namespace E_Commerce.Core.Services
             _orderRepo = orderRepo;
             _currentUser = currentUser;
         }
-        public async Task<OrderResponse> Checkout( )
+
+        public async Task<OrderResponse> CancelOrder(Guid orderId)
+        {
+            if (orderId == Guid.Empty) throw new InvalidIdException("OrderId cannot be empty.");
+
+            var userId = _currentUser.UserId;
+            if (orderId == Guid.Empty)
+                throw new InvalidIdException("Invalid id");
+
+            var order = await _orderRepo.GetOrderDetailsAsync(orderId, userId);
+
+            if (order == null)
+                throw new EntityNotFoundException("Order not found");
+            if (order.Status != StatusOrder.Pending)
+                throw new InvalidOperationException("Can't Cancle Order");
+
+            foreach (var item in order.OrderItems)
+            {
+                item.Product.StockQuantity += item.Quantity;
+            }
+
+            order.Status = StatusOrder.Cancelled;
+
+            await _unitOfWork.SaveAsync();
+            return _mapper.Map<OrderResponse>(order);
+        }
+
+        public async Task<OrderResponse> Checkout()
         {
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("UserId cannot be empty.");
@@ -85,11 +112,18 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<OrderResponse>(order);
         }
 
+        public async Task<List<OrderResponse>> GetAllOrders()
+        {
+            var orders = await _orderRepo.GetAllOrdersAsync();
+            return _mapper.Map<List<OrderResponse>>(orders);
+
+        }
+
         public async Task<List<OrderResponse>> GetOrderById()
         {
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("OrderId cannot be empty.");
-           var order = await _orderRepo.GetOrderByUserIdAsync(userId);
+            var order = await _orderRepo.GetOrderByUserIdAsync(userId);
 
             if (order == null) throw new EntityNotFoundException("Order not found.");
 
@@ -102,13 +136,57 @@ namespace E_Commerce.Core.Services
             if (userId == Guid.Empty || orderId == Guid.Empty)
                 throw new ArgumentException("Invalid id");
 
-            var order =await _orderRepo.GetOrderDetailsAsync(orderId, userId);
+            var order = await _orderRepo.GetOrderDetailsAsync(orderId, userId);
 
             if (order == null)
                 throw new EntityNotFoundException("Order not found");
 
             return _mapper.Map<OrderResponse>(order);
 
+        }
+
+        public async Task<OrderResponse> UpdateOrderStatus(Guid orderId, StatusOrder statusOrder)
+        {
+            if (orderId == Guid.Empty)
+                throw new ArgumentException("Invalid id");
+
+            var order = await _orderRepo.GetOrderByIdAsync(orderId);
+
+            if (order == null)
+                throw new EntityNotFoundException("Order not found");
+
+            if (order.Status == StatusOrder.Cancelled ||
+                order.Status == StatusOrder.Delivered)
+                throw new InvalidOperationException("Cannot update this order");
+
+            if (order.Status != StatusOrder.Cancelled &&
+                statusOrder == StatusOrder.Cancelled)
+            {
+                foreach (var item in order.OrderItems)
+                {
+                    item.Product.StockQuantity += item.Quantity;
+                }
+
+                order.Status = StatusOrder.Cancelled;
+            }
+            else if (order.Status == StatusOrder.Pending &&
+                     statusOrder == StatusOrder.Shipped)
+            {
+                order.Status = StatusOrder.Shipped;
+            }
+            else if (order.Status == StatusOrder.Shipped &&
+                     statusOrder == StatusOrder.Delivered)
+            {
+                order.Status = StatusOrder.Delivered;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid status transition");
+            }
+
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<OrderResponse>(order);
         }
     }
 }
