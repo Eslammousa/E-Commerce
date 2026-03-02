@@ -57,7 +57,7 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<OrderResponse>(order);
         }
 
-        public async Task<OrderResponse> Checkout()
+        public async Task<OrderResponse> Checkout(UserInFormation userInFormation)
         {
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("UserId cannot be empty.");
@@ -72,6 +72,9 @@ namespace E_Commerce.Core.Services
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow,
                 Status = StatusOrder.Pending,
+                PersonName = userInFormation.PersonName,
+                Phone = userInFormation.Phone,
+                Address = userInFormation.Address,
                 OrderItems = new List<OrderItem>()
             };
 

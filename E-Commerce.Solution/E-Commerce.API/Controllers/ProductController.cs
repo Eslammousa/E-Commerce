@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace E_Commerce.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -17,6 +16,7 @@ namespace E_Commerce.API.Controllers
             _productsService = productsService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult> AddProduct([FromForm] ProductAddRequest productAddRequest)
@@ -27,6 +27,7 @@ namespace E_Commerce.API.Controllers
             return Ok(addedProduct);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteProduct([FromRoute] Guid id)
         {
@@ -52,6 +53,7 @@ namespace E_Commerce.API.Controllers
             return Ok(await _productsService.GetProductByProductId(ProudctId));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult> UpdateProduct(Guid Id ,ProudctUpdateRequest proudctUpdateRequest)
         {

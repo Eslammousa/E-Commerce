@@ -18,6 +18,19 @@ namespace E_Commerce.Infrastructure.Data.Config
                    .IsRequired()
                    .HasColumnType("decimal(18,2)");
 
+            builder.Property(x=>x.PersonName)
+                     .HasMaxLength(100)
+                        .IsRequired();
+
+                builder.Property(x => x.Phone)
+                     .HasMaxLength(11)
+                     .IsRequired();
+
+            builder.Property(x => x.Address)
+                     .HasMaxLength(200)
+                     .IsRequired();
+
+
             builder.Property(x => x.Status)
                    .IsRequired();
 

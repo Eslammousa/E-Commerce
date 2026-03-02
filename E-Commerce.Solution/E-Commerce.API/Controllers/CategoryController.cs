@@ -15,7 +15,6 @@ namespace E_Commerce.API.Controllers
             _categoriesService = categoriesService;
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetAllCategories()
         {
@@ -23,14 +22,13 @@ namespace E_Commerce.API.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpGet("{categoryId:guid}")]
         public async Task<ActionResult> GetCategoryById(Guid categoryId)
         { 
             return Ok(await _categoriesService.GetCategoryById(categoryId));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddCategory(CategoryAddRequest categoryAddRequest)
         {
@@ -39,7 +37,7 @@ namespace E_Commerce.API.Controllers
            // return Ok(result);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{categoryId:guid}")]
         public async Task<ActionResult> UpdateCategory(Guid categoryId, CategoryUpdateRequest categoryUpdateRequest)
         {
@@ -47,7 +45,7 @@ namespace E_Commerce.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{categoryId:guid}")]
         public async Task<ActionResult> DeleteCategoryById(Guid categoryId)
         {

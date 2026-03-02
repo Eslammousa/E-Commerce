@@ -21,7 +21,6 @@ namespace E_Commerce.Infrastructure.Repositories
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }
-
         public async Task<List<Order>> GetOrderByUserIdAsync(Guid userId)
         {
             return await _db.Orders
@@ -31,7 +30,6 @@ namespace E_Commerce.Infrastructure.Repositories
            .OrderByDescending(o => o.CreatedAt)
            .ToListAsync();
         }
-
         public async Task<Order?> GetOrderDetailsAsync(Guid orderId, Guid userId)
         {
             return await _db.Orders

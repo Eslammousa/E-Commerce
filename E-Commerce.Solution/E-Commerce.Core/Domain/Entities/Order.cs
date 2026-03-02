@@ -12,6 +12,10 @@ namespace E_Commerce.Core.Domain.Entities
 
         public StatusOrder Status { get; set; }
 
+        public string PersonName { get; set; } = string.Empty;
+        public string Phone { get; set; } = null!;
+        public string Address { get; set; } = string.Empty;
+
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
         public Guid UserId { get; set; }

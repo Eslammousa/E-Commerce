@@ -36,6 +36,7 @@ namespace E_Commerce.Core.Mapping
                 .ForMember(d => d.CartItems,
                     opt => opt.MapFrom(src => src.CartItems));
 
+
             CreateMap<Order, OrderResponse>()
      .ForMember(dest => dest.Status,
                 opt => opt.MapFrom(src => src.Status.ToString()))

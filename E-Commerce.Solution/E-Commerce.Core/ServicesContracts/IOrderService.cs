@@ -5,7 +5,7 @@ namespace E_Commerce.Core.ServicesContracts
 {
     public interface IOrderService
     {
-        public Task<OrderResponse>Checkout();
+        public Task<OrderResponse>Checkout(UserInFormation userInFormation);
 
         public Task<List<OrderResponse>> GetOrderById();
 

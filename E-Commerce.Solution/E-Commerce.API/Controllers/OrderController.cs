@@ -19,17 +19,16 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpPost("checkout")]
-        public async Task<ActionResult> CheckOut()
+        public async Task<ActionResult> CheckOut(UserInFormation userInFormation)
         {
 
-            var result = await _orderService.Checkout();
+            var result = await _orderService.Checkout(userInFormation);
             return Ok(result);
         }
 
         [HttpGet]
         public async Task<ActionResult> GetOrders()
         {
-
             var orders = await _orderService.GetOrderById();
             return Ok(orders);
         }
