@@ -1,11 +1,12 @@
 ﻿using E_Commerce.Core.Domain.Enums;
+using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 
 namespace E_Commerce.Core.ServicesContracts
 {
     public interface IOrderService
     {
-        public Task<OrderResponse>Checkout(UserInFormation userInFormation);
+        public Task<OrderResponse>Checkout(CheckoutDto request);
 
         public Task<List<OrderResponse>> GetOrderById();
 

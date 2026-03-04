@@ -47,8 +47,13 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
 
+builder.Services.AddScoped<IAdressService, AdressService>();
+
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

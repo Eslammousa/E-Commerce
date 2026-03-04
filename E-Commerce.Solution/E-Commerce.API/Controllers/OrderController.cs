@@ -1,4 +1,4 @@
-﻿using E_Commerce.Core.Domain.Enums;
+﻿using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +19,10 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpPost("checkout")]
-        public async Task<ActionResult> CheckOut(UserInFormation userInFormation)
+        public async Task<ActionResult> CheckOut(CheckoutDto request)
         {
 
-            var result = await _orderService.Checkout(userInFormation);
+            var result = await _orderService.Checkout(request);
             return Ok(result);
         }
 
@@ -36,7 +36,6 @@ namespace E_Commerce.API.Controllers
         [HttpGet("{orderId:guid}")]
         public async Task<ActionResult> GetOrderDetails(Guid orderId)
         {
-
 
             var result = await _orderService.GetOrderDetails(orderId);
 
@@ -61,7 +60,7 @@ namespace E_Commerce.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{OrderId:guid}")]
-        public async Task<ActionResult> UpdateOrder(Guid orderId , [FromBody] UpdateOrderStatusRequest statusOrder)
+        public async Task<ActionResult> UpdateOrder(Guid orderId, [FromBody] UpdateOrderStatusRequest statusOrder)
         {
             await _orderService.UpdateOrderStatus(orderId, statusOrder.Status);
             return NoContent();

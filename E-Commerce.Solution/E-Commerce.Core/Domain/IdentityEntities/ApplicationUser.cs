@@ -16,5 +16,8 @@ namespace E_Commerce.Core.Domain.IdentityEntities
         public Cart Carts { get; set; } = null!;
 
        public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+
+        public ICollection<Address> Addresses { get; set; } = new List<Address>();
     }
 }

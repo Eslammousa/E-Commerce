@@ -2,6 +2,7 @@
 using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.Domain.Enums;
 using E_Commerce.Core.Domain.RepositoryContracts;
+using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 using E_Commerce.Core.Exceptions;
 using E_Commerce.Core.ServicesContracts;
@@ -13,6 +14,7 @@ namespace E_Commerce.Core.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IGenericRepository<Order> _orderRepository;
+        private readonly IGenericRepository<Address> _AdressRepo;
         private readonly IGenericRepository<CartItem> _cartItemRepo;
         private readonly ICartRepositroy _cartRepository;
         private readonly IOrderRepository _orderRepo;
@@ -20,7 +22,8 @@ namespace E_Commerce.Core.Services
 
 
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepository<Order> orderRepository,
-            ICartRepositroy cartRepositroy, IGenericRepository<CartItem> cartItemRepo, IOrderRepository orderRepo, ICurrentUserService currentUser)
+            ICartRepositroy cartRepositroy, IGenericRepository<CartItem> cartItemRepo, IOrderRepository orderRepo
+            , ICurrentUserService currentUser, IGenericRepository<Address> adressRepo)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -29,6 +32,7 @@ namespace E_Commerce.Core.Services
             _cartItemRepo = cartItemRepo;
             _orderRepo = orderRepo;
             _currentUser = currentUser;
+            _AdressRepo = adressRepo;
         }
 
         public async Task<OrderResponse> CancelOrder(Guid orderId)
@@ -57,7 +61,7 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<OrderResponse>(order);
         }
 
-        public async Task<OrderResponse> Checkout(UserInFormation userInFormation)
+        public async Task<OrderResponse> Checkout(CheckoutDto request)
         {
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("UserId cannot be empty.");
@@ -66,15 +70,48 @@ namespace E_Commerce.Core.Services
 
             if (cart == null || !cart.CartItems.Any()) throw new InvalidOperationException("Cart is empty");
 
+            Address address;
+
+            if (request.AddressId != Guid.Empty)
+            {
+                address = await _AdressRepo.FindAsync(x => x.Id == request.AddressId);
+
+                if (address == null || address.UserId != userId)
+                    throw new InvalidOperationException("Invalid address");
+            }
+            else if (request.NewAddress != null)
+            {
+                address = new Address
+                {
+                    Id = Guid.NewGuid(),
+                    Country = request.NewAddress.Country,
+                    City = request.NewAddress.City,
+                    Street = request.NewAddress.Street,
+                    Building = request.NewAddress.Building,
+                    UserId = userId
+                };
+
+                await _AdressRepo.AddAsync(address);
+            }
+            else
+            {
+                throw new InvalidOperationException("Address is required");
+            }
             var order = new Order
             {
                 Id = Guid.NewGuid(),
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow,
                 Status = StatusOrder.Pending,
-                PersonName = userInFormation.PersonName,
-                Phone = userInFormation.Phone,
-                Address = userInFormation.Address,
+
+                AddressId = address.Id,
+
+                // Snapshot
+                ShippingCountry = address.Country,
+                ShippingCity = address.City,
+                ShippingStreet = address.Street,
+                ShippingBuilding = address.Building,
+
                 OrderItems = new List<OrderItem>()
             };
 
@@ -104,7 +141,7 @@ namespace E_Commerce.Core.Services
 
             await _orderRepository.AddAsync(order);
 
-            // Clear cart manually
+            // Clear Cart
             foreach (var item in cart.CartItems)
             {
                 await _cartItemRepo.DeleteByIdAsync(item.Id);

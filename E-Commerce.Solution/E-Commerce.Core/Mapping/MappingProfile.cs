@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using E_Commerce.Core.Domain.Entities;
+using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.DTO.CartDTO;
 using E_Commerce.Core.DTO.CategoryDTO;
 using E_Commerce.Core.DTO.OrderDTO;
@@ -51,6 +52,9 @@ namespace E_Commerce.Core.Mapping
               src.Product.Image))
        .ForMember(dest => dest.UnitPrice,
            opt => opt.MapFrom(src => src.UnitPrice));
+
+
+            CreateMap<Address, ResponseAdress>();
 
 
 
