@@ -13,14 +13,17 @@ namespace E_Commerce.Core.Services
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IProudctRepository _proudctRepository;
 
-        public ProductsService( IGenericRepository<Product> genericRepository, IImageService imageService, IMapper mapper , IUnitOfWork unitOfWork)
+        public ProductsService( IGenericRepository<Product> genericRepository, IImageService imageService
+            , IMapper mapper , IUnitOfWork unitOfWork , IProudctRepository proudctRepository)
         {
           
             _genericRepository = genericRepository;
             _imageService = imageService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _proudctRepository = proudctRepository;
         }
 
         public async Task<ProductResponse> AddProduct(ProductAddRequest productAddRequest)
@@ -80,14 +83,15 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<IEnumerable<ProductResponse>>(result);
         }
 
-        public async Task<ProductResponse> GetProductByProductId(Guid id)
+        public async Task<ResponseProductWithReview> GetProductByProductId(Guid id)
         {
             if (id == Guid.Empty) throw new InvalidIdException($"Id {id} Can't be Empty");
-            var proudct = await _genericRepository.FindAsync(x => x.Id == id, x => x.Category);
+            var proudct = await _proudctRepository.GetProudctWithReviews(id);
+
 
             if (proudct == null) throw new EntityNotFoundException($"Product with id {id} not found");
 
-            return _mapper.Map<ProductResponse>(proudct);
+            return _mapper.Map<ResponseProductWithReview>(proudct);
         }
 
         public async Task<ProductResponse> GetProductByProductName(string name)

@@ -9,7 +9,7 @@ namespace E_Commerce.Core.ServicesContracts
         Task<bool> DeleteProduct(Guid Id);
 
 
-        Task<ProductResponse> GetProductByProductId(Guid id);
+        Task<ResponseProductWithReview> GetProductByProductId(Guid id);
         Task<ProductResponse> GetProductByProductName(string name);
 
 

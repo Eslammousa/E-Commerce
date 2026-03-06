@@ -36,6 +36,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
+builder.Services.AddScoped<IProudctRepository, ProudctRepository>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 
 builder.Services.AddScoped<ICartRepositroy, CartRepository>();
@@ -49,6 +50,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<IAdressService, AdressService>();
 
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();

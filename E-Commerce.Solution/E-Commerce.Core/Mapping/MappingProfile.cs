@@ -5,6 +5,7 @@ using E_Commerce.Core.DTO.CartDTO;
 using E_Commerce.Core.DTO.CategoryDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 using E_Commerce.Core.DTO.ProductDTO;
+using E_Commerce.Core.DTO.ReviewDTO;
 
 namespace E_Commerce.Core.Mapping
 {
@@ -28,6 +29,13 @@ namespace E_Commerce.Core.Mapping
             CreateMap<Product, ProductResponse>()
              .ForMember( d => d.CategoryName,
                        opt => opt.MapFrom(src => src.Category.Name));
+
+            CreateMap<Product, ResponseProductWithReview>()
+                .ForMember(d => d.Reviews,
+                        opt => opt.MapFrom(src => src.Reviews));
+
+
+
 
             CreateMap<CartItem, CartItemResponse>()
                 .ForMember(d => d.ProductName,
@@ -56,6 +64,11 @@ namespace E_Commerce.Core.Mapping
 
             CreateMap<Address, ResponseAdress>();
 
+
+            CreateMap<ReviewAddRequest, Review>();
+            CreateMap<Review, ReviewResponse>()
+                .ForMember(dest => dest.UserName,
+                    opt => opt.MapFrom(src => src.User.PersonName));
 
 
 

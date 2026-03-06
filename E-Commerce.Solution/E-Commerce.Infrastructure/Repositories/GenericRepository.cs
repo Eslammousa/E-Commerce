@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Core.Domain.RepositoryContracts;
 using E_Commerce.Infrastructure.Data.DBContext;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq.Expressions;
 
 namespace E_Commerce.Infrastructure.Repositories
@@ -70,5 +71,7 @@ namespace E_Commerce.Infrastructure.Repositories
             _dbSet.Update(Object);
             return Object;
         }
+
+      
     }
 }

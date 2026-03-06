@@ -19,5 +19,6 @@ namespace E_Commerce.Core.ServicesContracts
         public Task<OrderResponse> UpdateOrderStatus(Guid orderId , StatusOrder statusOrder);
 
 
+
     }
 }
