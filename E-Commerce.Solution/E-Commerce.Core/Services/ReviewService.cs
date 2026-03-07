@@ -56,11 +56,46 @@ namespace E_Commerce.Core.Services
 
         }
 
-        public async Task<List<ReviewResponse>> GetAllReviewsByProudct(Guid ProductId)
+        public async Task<bool> DeleteReview(Guid reviewId)
         {
-            var reviews = await _reviewRepository.WhereAsync(x => x.ProductId == ProductId, x => x.User);
-            return _mapper.Map<List<ReviewResponse>>(reviews);
+            if (reviewId == Guid.Empty)
+                throw new InvalidIdException("Invalid review ID");
 
+            var review = await _reviewRepository.FindAsync(x => x.Id == reviewId);
+
+            if (review == null)
+                throw new EntityNotFoundException("Review not found");
+
+            var userId = _currentUserService.UserId;
+
+            if (review.UserId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to delete this review");
+
+            var product = await _ProudctRepo.FindAsync(x => x.Id == review.ProductId , x=>x.Reviews);
+
+            if (product != null)
+            {
+                var oldCount = product.ReviewCount;
+                var oldAverage = product.AvgRating;
+
+                product.ReviewCount--;
+
+                if (product.ReviewCount > 0)
+                {
+                    product.AvgRating =
+                        ((oldAverage * oldCount) - review.Rating) / product.ReviewCount;
+                }
+                else
+                {
+                    product.AvgRating = 0;
+                }
+            }
+
+            await _reviewRepository.DeleteByIdAsync(reviewId);
+
+            await _unitOfWork.SaveAsync();
+
+            return true;
         }
     }
 }

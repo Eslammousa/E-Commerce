@@ -1,0 +1,1200 @@
+2026-03-07 06:08:08.827 +02:00 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2026-03-07 06:08:09.141 +02:00 [INF] User profile is available. Using 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-07 06:08:10.011 +02:00 [DBG] The index {'CartId'} was not created on entity type 'CartItem' as the properties are already covered by the index {'CartId', 'ProductId'}.
+2026-03-07 06:08:10.015 +02:00 [DBG] The index {'UserId'} was not created on entity type 'Review' as the properties are already covered by the index {'UserId', 'ProductId'}.
+2026-03-07 06:08:10.017 +02:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserRole<Guid>' as the properties are already covered by the index {'UserId', 'RoleId'}.
+2026-03-07 06:08:10.020 +02:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserToken<Guid>' as the properties are already covered by the index {'UserId', 'LoginProvider', 'Name'}.
+2026-03-07 06:08:10.425 +02:00 [DBG] Entity Framework Core 9.0.11 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:9.0.11' with options: EngineType=SqlServer 
+2026-03-07 06:08:10.640 +02:00 [DBG] Compiling query expression: 
+'DbSet<ApplicationRole>()
+    .FirstOrDefault(r => r.NormalizedName == __normalizedName_0)'
+2026-03-07 06:08:11.145 +02:00 [DBG] Generated query execution expression: 
+'queryContext => ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync<ApplicationRole>(
+    asyncEnumerable: SingleQueryingEnumerable.Create<ApplicationRole>(
+        relationalQueryContext: (RelationalQueryContext)queryContext, 
+        relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationRole.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationRole.ConcurrencyStamp (string) Concurrency, 1], [Property: ApplicationRole.Name (string) MaxLength(256), 2], [Property: ApplicationRole.NormalizedName (string) Index MaxLength(256), 3] }
+            SELECT TOP(1) a.Id, a.ConcurrencyStamp, a.Name, a.NormalizedName
+            FROM AspNetRoles AS a
+            WHERE a.NormalizedName == @__normalizedName_0) | Resolver: c => new RelationalCommandCache(
+            c.Dependencies.MemoryCache, 
+            c.RelationalDependencies.QuerySqlGeneratorFactory, 
+            c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationRole.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationRole.ConcurrencyStamp (string) Concurrency, 1], [Property: ApplicationRole.Name (string) MaxLength(256), 2], [Property: ApplicationRole.NormalizedName (string) Index MaxLength(256), 3] }
+            SELECT TOP(1) a.Id, a.ConcurrencyStamp, a.Name, a.NormalizedName
+            FROM AspNetRoles AS a
+            WHERE a.NormalizedName == @__normalizedName_0, 
+            False, 
+            new HashSet<string>(
+                new string[]{ }, 
+                StringComparer.Ordinal
+            )
+        )].GetRelationalCommandTemplate(parameters), 
+        readerColumns: null, 
+        shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+        {
+            ApplicationRole entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                ApplicationRole instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(ApplicationRole);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: ApplicationRole.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetGuid(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (ApplicationRole)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: ApplicationRole | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: ApplicationRole | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole")]: 
+                            {
+                                return 
+                                {
+                                    ApplicationRole instance;
+                                    instance = new ApplicationRole();
+                                    instance.<Id>k__BackingField = dataReader.GetGuid(0);
+                                    instance.<ConcurrencyStamp>k__BackingField = dataReader.IsDBNull(1) ? default(string) : dataReader.GetString(1);
+                                    instance.<Name>k__BackingField = dataReader.IsDBNull(2) ? default(string) : dataReader.GetString(2);
+                                    instance.<NormalizedName>k__BackingField = dataReader.IsDBNull(3) ? default(string) : dataReader.GetString(3);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: ApplicationRole | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(ApplicationRole)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            return entity;
+        }, 
+        contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+        standAloneStateManager: False, 
+        detailedErrorsEnabled: False, 
+        threadSafetyChecksEnabled: True), 
+    cancellationToken: queryContext.CancellationToken)'
+2026-03-07 06:08:11.220 +02:00 [DBG] Creating DbConnection.
+2026-03-07 06:08:11.279 +02:00 [DBG] Created DbConnection. (55ms).
+2026-03-07 06:08:11.294 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:11.853 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:11.859 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:08:11.871 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (5ms).
+2026-03-07 06:08:11.886 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (26ms).
+2026-03-07 06:08:11.905 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:08:12.032 +02:00 [INF] Executed DbCommand (110ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:08:12.126 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationRole' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:08:12.167 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.185 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 137ms reading results.
+2026-03-07 06:08:12.195 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.210 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (14ms).
+2026-03-07 06:08:12.220 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.225 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.228 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:08:12.230 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (2ms).
+2026-03-07 06:08:12.233 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (5ms).
+2026-03-07 06:08:12.234 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:08:12.239 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:08:12.245 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationRole' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:08:12.246 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.248 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 2ms reading results.
+2026-03-07 06:08:12.249 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.250 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (1ms).
+2026-03-07 06:08:12.255 +02:00 [DBG] Compiling query expression: 
+'DbSet<ApplicationUser>()
+    .SingleOrDefault(u => u.NormalizedEmail == __normalizedEmail_0)'
+2026-03-07 06:08:12.265 +02:00 [DBG] Generated query execution expression: 
+'queryContext => ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync<ApplicationUser>(
+    asyncEnumerable: SingleQueryingEnumerable.Create<ApplicationUser>(
+        relationalQueryContext: (RelationalQueryContext)queryContext, 
+        relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PersonName (string), 10], [Property: ApplicationUser.PhoneNumber (string), 11], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 12], [Property: ApplicationUser.RefreshToken (string), 13], [Property: ApplicationUser.RefreshTokenExpirationDateTime (DateTime?), 14], [Property: ApplicationUser.SecurityStamp (string), 15], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 16], [Property: ApplicationUser.UserName (string) MaxLength(256), 17], [Property: ApplicationUser.UserType (string) Required, 18] }
+            SELECT TOP(2) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PersonName, a.PhoneNumber, a.PhoneNumberConfirmed, a.RefreshToken, a.RefreshTokenExpirationDateTime, a.SecurityStamp, a.TwoFactorEnabled, a.UserName, a.UserType
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedEmail == @__normalizedEmail_0) | Resolver: c => new RelationalCommandCache(
+            c.Dependencies.MemoryCache, 
+            c.RelationalDependencies.QuerySqlGeneratorFactory, 
+            c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PersonName (string), 10], [Property: ApplicationUser.PhoneNumber (string), 11], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 12], [Property: ApplicationUser.RefreshToken (string), 13], [Property: ApplicationUser.RefreshTokenExpirationDateTime (DateTime?), 14], [Property: ApplicationUser.SecurityStamp (string), 15], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 16], [Property: ApplicationUser.UserName (string) MaxLength(256), 17], [Property: ApplicationUser.UserType (string) Required, 18] }
+            SELECT TOP(2) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PersonName, a.PhoneNumber, a.PhoneNumberConfirmed, a.RefreshToken, a.RefreshTokenExpirationDateTime, a.SecurityStamp, a.TwoFactorEnabled, a.UserName, a.UserType
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedEmail == @__normalizedEmail_0, 
+            False, 
+            new HashSet<string>(
+                new string[]{ }, 
+                StringComparer.Ordinal
+            )
+        )].GetRelationalCommandTemplate(parameters), 
+        readerColumns: null, 
+        shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+        {
+            ApplicationUser entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                ApplicationUser instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(ApplicationUser);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: ApplicationUser.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetGuid(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (ApplicationUser)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")]: 
+                            {
+                                return 
+                                {
+                                    ApplicationUser instance;
+                                    instance = new ApplicationUser();
+                                    instance.<Id>k__BackingField = dataReader.GetGuid(0);
+                                    instance.<AccessFailedCount>k__BackingField = dataReader.GetInt32(1);
+                                    instance.<ConcurrencyStamp>k__BackingField = dataReader.IsDBNull(2) ? default(string) : dataReader.GetString(2);
+                                    instance.<Email>k__BackingField = dataReader.IsDBNull(3) ? default(string) : dataReader.GetString(3);
+                                    instance.<EmailConfirmed>k__BackingField = dataReader.GetBoolean(4);
+                                    instance.<LockoutEnabled>k__BackingField = dataReader.GetBoolean(5);
+                                    instance.<LockoutEnd>k__BackingField = dataReader.IsDBNull(6) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue<DateTimeOffset>(6);
+                                    instance.<NormalizedEmail>k__BackingField = dataReader.IsDBNull(7) ? default(string) : dataReader.GetString(7);
+                                    instance.<NormalizedUserName>k__BackingField = dataReader.IsDBNull(8) ? default(string) : dataReader.GetString(8);
+                                    instance.<PasswordHash>k__BackingField = dataReader.IsDBNull(9) ? default(string) : dataReader.GetString(9);
+                                    instance.<PersonName>k__BackingField = dataReader.IsDBNull(10) ? default(string) : dataReader.GetString(10);
+                                    instance.<PhoneNumber>k__BackingField = dataReader.IsDBNull(11) ? default(string) : dataReader.GetString(11);
+                                    instance.<PhoneNumberConfirmed>k__BackingField = dataReader.GetBoolean(12);
+                                    instance.<RefreshToken>k__BackingField = dataReader.IsDBNull(13) ? default(string) : dataReader.GetString(13);
+                                    instance.<RefreshTokenExpirationDateTime>k__BackingField = dataReader.IsDBNull(14) ? default(DateTime?) : (DateTime?)dataReader.GetDateTime(14);
+                                    instance.<SecurityStamp>k__BackingField = dataReader.IsDBNull(15) ? default(string) : dataReader.GetString(15);
+                                    instance.<TwoFactorEnabled>k__BackingField = dataReader.GetBoolean(16);
+                                    instance.<UserName>k__BackingField = dataReader.IsDBNull(17) ? default(string) : dataReader.GetString(17);
+                                    instance.<UserType>k__BackingField = dataReader.GetString(18);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(ApplicationUser)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            return entity;
+        }, 
+        contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+        standAloneStateManager: False, 
+        detailedErrorsEnabled: False, 
+        threadSafetyChecksEnabled: True), 
+    cancellationToken: queryContext.CancellationToken)'
+2026-03-07 06:08:12.274 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.276 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.277 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:08:12.278 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:08:12.279 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:08:12.280 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-03-07 06:08:12.294 +02:00 [INF] Executed DbCommand (15ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-03-07 06:08:12.320 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationUser' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:08:12.391 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.396 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 98ms reading results.
+2026-03-07 06:08:12.400 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.401 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (0ms).
+2026-03-07 06:08:12.403 +02:00 [DBG] 'ApplicationDbContext' disposed.
+2026-03-07 06:08:12.409 +02:00 [DBG] Disposing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:08:12.416 +02:00 [DBG] Disposed connection to database '' on server '' (5ms).
+2026-03-07 06:08:12.522 +02:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2026-03-07 06:08:12.753 +02:00 [DBG] Hosting starting
+2026-03-07 06:08:12.791 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-09add162-018c-493a-8252-182184c45896.xml'.
+2026-03-07 06:08:12.805 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-9a4445b1-d6f4-4cba-a44e-60b82f22e3ac.xml'.
+2026-03-07 06:08:12.810 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-a411f4b0-dae0-4c41-962c-14fb29b0f9a8.xml'.
+2026-03-07 06:08:12.814 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-b5b37556-f820-46e3-96cf-da10005d04c3.xml'.
+2026-03-07 06:08:12.818 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-d07bea46-9efe-4f00-8bb8-cc33a29cfdd2.xml'.
+2026-03-07 06:08:12.823 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-d897f534-e6bc-4869-91a2-e12e4a008fc7.xml'.
+2026-03-07 06:08:12.836 +02:00 [DBG] Found key {09add162-018c-493a-8252-182184c45896}.
+2026-03-07 06:08:12.863 +02:00 [DBG] Found key {9a4445b1-d6f4-4cba-a44e-60b82f22e3ac}.
+2026-03-07 06:08:12.868 +02:00 [DBG] Found key {a411f4b0-dae0-4c41-962c-14fb29b0f9a8}.
+2026-03-07 06:08:12.872 +02:00 [DBG] Found key {b5b37556-f820-46e3-96cf-da10005d04c3}.
+2026-03-07 06:08:12.875 +02:00 [DBG] Found key {d07bea46-9efe-4f00-8bb8-cc33a29cfdd2}.
+2026-03-07 06:08:12.876 +02:00 [DBG] Found key {d897f534-e6bc-4869-91a2-e12e4a008fc7}.
+2026-03-07 06:08:12.889 +02:00 [DBG] Considering key {b5b37556-f820-46e3-96cf-da10005d04c3} with expiration date 2026-05-27 22:10:56Z as default key.
+2026-03-07 06:08:12.896 +02:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-03-07 06:08:12.901 +02:00 [DBG] Decrypting secret element using Windows DPAPI.
+2026-03-07 06:08:12.907 +02:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-03-07 06:08:12.915 +02:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2026-03-07 06:08:12.924 +02:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2026-03-07 06:08:12.932 +02:00 [DBG] Using key {b5b37556-f820-46e3-96cf-da10005d04c3} as the default key.
+2026-03-07 06:08:12.938 +02:00 [DBG] Key ring with default key {b5b37556-f820-46e3-96cf-da10005d04c3} was loaded during application startup.
+2026-03-07 06:08:12.962 +02:00 [DBG] Middleware loaded
+2026-03-07 06:08:12.970 +02:00 [DBG] Middleware loaded. Script /_framework/aspnetcore-browser-refresh.js (16513 B).
+2026-03-07 06:08:12.974 +02:00 [DBG] Middleware loaded. Script /_framework/blazor-hotreload.js (799 B).
+2026-03-07 06:08:13.102 +02:00 [DBG] Middleware configuration started with options: {AllowedHosts = *, AllowEmptyHosts = True, IncludeFailureMessage = True}
+2026-03-07 06:08:13.106 +02:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2026-03-07 06:08:13.136 +02:00 [DBG] Middleware loaded: DOTNET_MODIFIABLE_ASSEMBLIES=debug, __ASPNETCORE_BROWSER_TOOLS=true
+2026-03-07 06:08:13.440 +02:00 [DBG] Connection id "0HNJRVSJG0G3A" received FIN.
+2026-03-07 06:08:13.440 +02:00 [DBG] Connection id "0HNJRVSJG0G3B" received FIN.
+2026-03-07 06:08:13.454 +02:00 [DBG] Connection id "0HNJRVSJG0G3A" accepted.
+2026-03-07 06:08:13.454 +02:00 [DBG] Connection id "0HNJRVSJG0G3B" accepted.
+2026-03-07 06:08:13.458 +02:00 [DBG] Connection id "0HNJRVSJG0G3A" started.
+2026-03-07 06:08:13.458 +02:00 [DBG] Connection id "0HNJRVSJG0G3B" started.
+2026-03-07 06:08:13.458 +02:00 [INF] Now listening on: https://localhost:7221
+2026-03-07 06:08:13.466 +02:00 [INF] Now listening on: http://localhost:5117
+2026-03-07 06:08:13.468 +02:00 [DBG] Loaded hosting startup assembly E-Commerce.API
+2026-03-07 06:08:13.469 +02:00 [DBG] Loaded hosting startup assembly Microsoft.WebTools.ApiEndpointDiscovery
+2026-03-07 06:08:13.471 +02:00 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2026-03-07 06:08:13.474 +02:00 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2026-03-07 06:08:13.484 +02:00 [DBG] Executing API description provider 'EndpointMetadataApiDescriptionProvider' from assembly Microsoft.AspNetCore.Mvc.ApiExplorer v9.0.0.0.
+2026-03-07 06:08:13.489 +02:00 [DBG] Executing API description provider 'DefaultApiDescriptionProvider' from assembly Microsoft.AspNetCore.Mvc.ApiExplorer v9.0.0.0.
+2026-03-07 06:08:13.491 +02:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-03-07 06:08:13.491 +02:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-03-07 06:08:13.524 +02:00 [DBG] Connection id "0HNJRVSJG0G3B" stopped.
+2026-03-07 06:08:13.525 +02:00 [DBG] Connection id "0HNJRVSJG0G3A" stopped.
+2026-03-07 06:08:13.533 +02:00 [DBG] Connection id "0HNJRVSJG0G3B" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-03-07 06:08:13.533 +02:00 [DBG] Connection id "0HNJRVSJG0G3A" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-03-07 06:08:13.616 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-07 06:08:13.618 +02:00 [INF] Hosting environment: Development
+2026-03-07 06:08:13.620 +02:00 [INF] Content root path: D:\WebAPI\E-Commerce\E-Commerce.Solution\E-Commerce.API
+2026-03-07 06:08:13.622 +02:00 [DBG] Hosting started
+2026-03-07 06:08:13.886 +02:00 [DBG] Connection id "0HNJRVSJG0G3C" accepted.
+2026-03-07 06:08:14.134 +02:00 [DBG] Connection id "0HNJRVSJG0G3C" started.
+2026-03-07 06:08:14.199 +02:00 [DBG] Connection 0HNJRVSJG0G3C established using the following protocol: "Tls13"
+2026-03-07 06:08:14.333 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/_vs/browserLink - null null
+2026-03-07 06:08:14.333 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/_framework/aspnetcore-browser-refresh.js - null null
+2026-03-07 06:08:14.380 +02:00 [DBG] Script injected: /_framework/aspnetcore-browser-refresh.js
+2026-03-07 06:08:14.422 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/_framework/aspnetcore-browser-refresh.js - 200 16513 application/javascript; charset=utf-8 99.9908ms
+2026-03-07 06:08:14.460 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/_vs/browserLink - 200 null text/javascript; charset=UTF-8 139.5644ms
+2026-03-07 06:08:14.505 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/swagger/v1/swagger.json - null null
+2026-03-07 06:08:14.563 +02:00 [DBG] No candidates found for the request path '/swagger/v1/swagger.json'
+2026-03-07 06:08:14.565 +02:00 [DBG] Request did not match any endpoints
+2026-03-07 06:08:14.700 +02:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2026-03-07 06:08:14.748 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 244.7502ms
+2026-03-07 06:23:04.049 +02:00 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2026-03-07 06:23:04.222 +02:00 [INF] User profile is available. Using 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-07 06:23:04.953 +02:00 [DBG] The index {'CartId'} was not created on entity type 'CartItem' as the properties are already covered by the index {'CartId', 'ProductId'}.
+2026-03-07 06:23:04.956 +02:00 [DBG] The index {'UserId'} was not created on entity type 'Review' as the properties are already covered by the index {'UserId', 'ProductId'}.
+2026-03-07 06:23:04.958 +02:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserRole<Guid>' as the properties are already covered by the index {'UserId', 'RoleId'}.
+2026-03-07 06:23:04.960 +02:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserToken<Guid>' as the properties are already covered by the index {'UserId', 'LoginProvider', 'Name'}.
+2026-03-07 06:23:05.159 +02:00 [DBG] Entity Framework Core 9.0.11 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:9.0.11' with options: EngineType=SqlServer 
+2026-03-07 06:23:05.242 +02:00 [DBG] Compiling query expression: 
+'DbSet<ApplicationRole>()
+    .FirstOrDefault(r => r.NormalizedName == __normalizedName_0)'
+2026-03-07 06:23:05.592 +02:00 [DBG] Generated query execution expression: 
+'queryContext => ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync<ApplicationRole>(
+    asyncEnumerable: SingleQueryingEnumerable.Create<ApplicationRole>(
+        relationalQueryContext: (RelationalQueryContext)queryContext, 
+        relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationRole.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationRole.ConcurrencyStamp (string) Concurrency, 1], [Property: ApplicationRole.Name (string) MaxLength(256), 2], [Property: ApplicationRole.NormalizedName (string) Index MaxLength(256), 3] }
+            SELECT TOP(1) a.Id, a.ConcurrencyStamp, a.Name, a.NormalizedName
+            FROM AspNetRoles AS a
+            WHERE a.NormalizedName == @__normalizedName_0) | Resolver: c => new RelationalCommandCache(
+            c.Dependencies.MemoryCache, 
+            c.RelationalDependencies.QuerySqlGeneratorFactory, 
+            c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationRole.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationRole.ConcurrencyStamp (string) Concurrency, 1], [Property: ApplicationRole.Name (string) MaxLength(256), 2], [Property: ApplicationRole.NormalizedName (string) Index MaxLength(256), 3] }
+            SELECT TOP(1) a.Id, a.ConcurrencyStamp, a.Name, a.NormalizedName
+            FROM AspNetRoles AS a
+            WHERE a.NormalizedName == @__normalizedName_0, 
+            False, 
+            new HashSet<string>(
+                new string[]{ }, 
+                StringComparer.Ordinal
+            )
+        )].GetRelationalCommandTemplate(parameters), 
+        readerColumns: null, 
+        shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+        {
+            ApplicationRole entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                ApplicationRole instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(ApplicationRole);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: ApplicationRole.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetGuid(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (ApplicationRole)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: ApplicationRole | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: ApplicationRole | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole")]: 
+                            {
+                                return 
+                                {
+                                    ApplicationRole instance;
+                                    instance = new ApplicationRole();
+                                    instance.<Id>k__BackingField = dataReader.GetGuid(0);
+                                    instance.<ConcurrencyStamp>k__BackingField = dataReader.IsDBNull(1) ? default(string) : dataReader.GetString(1);
+                                    instance.<Name>k__BackingField = dataReader.IsDBNull(2) ? default(string) : dataReader.GetString(2);
+                                    instance.<NormalizedName>k__BackingField = dataReader.IsDBNull(3) ? default(string) : dataReader.GetString(3);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: ApplicationRole | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationRole")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(ApplicationRole)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            return entity;
+        }, 
+        contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+        standAloneStateManager: False, 
+        detailedErrorsEnabled: False, 
+        threadSafetyChecksEnabled: True), 
+    cancellationToken: queryContext.CancellationToken)'
+2026-03-07 06:23:05.636 +02:00 [DBG] Creating DbConnection.
+2026-03-07 06:23:05.659 +02:00 [DBG] Created DbConnection. (19ms).
+2026-03-07 06:23:05.665 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.056 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.061 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:06.074 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (7ms).
+2026-03-07 06:23:06.082 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (21ms).
+2026-03-07 06:23:06.100 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:23:06.208 +02:00 [INF] Executed DbCommand (98ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:23:06.281 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationRole' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:06.313 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.326 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 107ms reading results.
+2026-03-07 06:23:06.332 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.344 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (10ms).
+2026-03-07 06:23:06.361 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.364 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.365 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:06.367 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:06.369 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2026-03-07 06:23:06.371 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:23:06.376 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-03-07 06:23:06.379 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationRole' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:06.381 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.382 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 3ms reading results.
+2026-03-07 06:23:06.385 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.389 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (4ms).
+2026-03-07 06:23:06.396 +02:00 [DBG] Compiling query expression: 
+'DbSet<ApplicationUser>()
+    .SingleOrDefault(u => u.NormalizedEmail == __normalizedEmail_0)'
+2026-03-07 06:23:06.412 +02:00 [DBG] Generated query execution expression: 
+'queryContext => ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync<ApplicationUser>(
+    asyncEnumerable: SingleQueryingEnumerable.Create<ApplicationUser>(
+        relationalQueryContext: (RelationalQueryContext)queryContext, 
+        relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PersonName (string), 10], [Property: ApplicationUser.PhoneNumber (string), 11], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 12], [Property: ApplicationUser.RefreshToken (string), 13], [Property: ApplicationUser.RefreshTokenExpirationDateTime (DateTime?), 14], [Property: ApplicationUser.SecurityStamp (string), 15], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 16], [Property: ApplicationUser.UserName (string) MaxLength(256), 17], [Property: ApplicationUser.UserType (string) Required, 18] }
+            SELECT TOP(2) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PersonName, a.PhoneNumber, a.PhoneNumberConfirmed, a.RefreshToken, a.RefreshTokenExpirationDateTime, a.SecurityStamp, a.TwoFactorEnabled, a.UserName, a.UserType
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedEmail == @__normalizedEmail_0) | Resolver: c => new RelationalCommandCache(
+            c.Dependencies.MemoryCache, 
+            c.RelationalDependencies.QuerySqlGeneratorFactory, 
+            c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PersonName (string), 10], [Property: ApplicationUser.PhoneNumber (string), 11], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 12], [Property: ApplicationUser.RefreshToken (string), 13], [Property: ApplicationUser.RefreshTokenExpirationDateTime (DateTime?), 14], [Property: ApplicationUser.SecurityStamp (string), 15], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 16], [Property: ApplicationUser.UserName (string) MaxLength(256), 17], [Property: ApplicationUser.UserType (string) Required, 18] }
+            SELECT TOP(2) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PersonName, a.PhoneNumber, a.PhoneNumberConfirmed, a.RefreshToken, a.RefreshTokenExpirationDateTime, a.SecurityStamp, a.TwoFactorEnabled, a.UserName, a.UserType
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedEmail == @__normalizedEmail_0, 
+            False, 
+            new HashSet<string>(
+                new string[]{ }, 
+                StringComparer.Ordinal
+            )
+        )].GetRelationalCommandTemplate(parameters), 
+        readerColumns: null, 
+        shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+        {
+            ApplicationUser entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                ApplicationUser instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(ApplicationUser);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: ApplicationUser.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetGuid(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (ApplicationUser)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")]: 
+                            {
+                                return 
+                                {
+                                    ApplicationUser instance;
+                                    instance = new ApplicationUser();
+                                    instance.<Id>k__BackingField = dataReader.GetGuid(0);
+                                    instance.<AccessFailedCount>k__BackingField = dataReader.GetInt32(1);
+                                    instance.<ConcurrencyStamp>k__BackingField = dataReader.IsDBNull(2) ? default(string) : dataReader.GetString(2);
+                                    instance.<Email>k__BackingField = dataReader.IsDBNull(3) ? default(string) : dataReader.GetString(3);
+                                    instance.<EmailConfirmed>k__BackingField = dataReader.GetBoolean(4);
+                                    instance.<LockoutEnabled>k__BackingField = dataReader.GetBoolean(5);
+                                    instance.<LockoutEnd>k__BackingField = dataReader.IsDBNull(6) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue<DateTimeOffset>(6);
+                                    instance.<NormalizedEmail>k__BackingField = dataReader.IsDBNull(7) ? default(string) : dataReader.GetString(7);
+                                    instance.<NormalizedUserName>k__BackingField = dataReader.IsDBNull(8) ? default(string) : dataReader.GetString(8);
+                                    instance.<PasswordHash>k__BackingField = dataReader.IsDBNull(9) ? default(string) : dataReader.GetString(9);
+                                    instance.<PersonName>k__BackingField = dataReader.IsDBNull(10) ? default(string) : dataReader.GetString(10);
+                                    instance.<PhoneNumber>k__BackingField = dataReader.IsDBNull(11) ? default(string) : dataReader.GetString(11);
+                                    instance.<PhoneNumberConfirmed>k__BackingField = dataReader.GetBoolean(12);
+                                    instance.<RefreshToken>k__BackingField = dataReader.IsDBNull(13) ? default(string) : dataReader.GetString(13);
+                                    instance.<RefreshTokenExpirationDateTime>k__BackingField = dataReader.IsDBNull(14) ? default(DateTime?) : (DateTime?)dataReader.GetDateTime(14);
+                                    instance.<SecurityStamp>k__BackingField = dataReader.IsDBNull(15) ? default(string) : dataReader.GetString(15);
+                                    instance.<TwoFactorEnabled>k__BackingField = dataReader.GetBoolean(16);
+                                    instance.<UserName>k__BackingField = dataReader.IsDBNull(17) ? default(string) : dataReader.GetString(17);
+                                    instance.<UserType>k__BackingField = dataReader.GetString(18);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(ApplicationUser)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            return entity;
+        }, 
+        contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+        standAloneStateManager: False, 
+        detailedErrorsEnabled: False, 
+        threadSafetyChecksEnabled: True), 
+    cancellationToken: queryContext.CancellationToken)'
+2026-03-07 06:23:06.422 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.423 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.428 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:06.430 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:06.439 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (10ms).
+2026-03-07 06:23:06.440 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-03-07 06:23:06.448 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-03-07 06:23:06.469 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationUser' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:06.526 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.529 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 79ms reading results.
+2026-03-07 06:23:06.533 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.537 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (3ms).
+2026-03-07 06:23:06.546 +02:00 [DBG] 'ApplicationDbContext' disposed.
+2026-03-07 06:23:06.551 +02:00 [DBG] Disposing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:06.556 +02:00 [DBG] Disposed connection to database '' on server '' (4ms).
+2026-03-07 06:23:06.649 +02:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2026-03-07 06:23:06.764 +02:00 [DBG] Hosting starting
+2026-03-07 06:23:06.784 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-09add162-018c-493a-8252-182184c45896.xml'.
+2026-03-07 06:23:06.791 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-9a4445b1-d6f4-4cba-a44e-60b82f22e3ac.xml'.
+2026-03-07 06:23:06.798 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-a411f4b0-dae0-4c41-962c-14fb29b0f9a8.xml'.
+2026-03-07 06:23:06.803 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-b5b37556-f820-46e3-96cf-da10005d04c3.xml'.
+2026-03-07 06:23:06.807 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-d07bea46-9efe-4f00-8bb8-cc33a29cfdd2.xml'.
+2026-03-07 06:23:06.809 +02:00 [DBG] Reading data from file 'C:\Users\eslam\AppData\Local\ASP.NET\DataProtection-Keys\key-d897f534-e6bc-4869-91a2-e12e4a008fc7.xml'.
+2026-03-07 06:23:06.814 +02:00 [DBG] Found key {09add162-018c-493a-8252-182184c45896}.
+2026-03-07 06:23:06.820 +02:00 [DBG] Found key {9a4445b1-d6f4-4cba-a44e-60b82f22e3ac}.
+2026-03-07 06:23:06.823 +02:00 [DBG] Found key {a411f4b0-dae0-4c41-962c-14fb29b0f9a8}.
+2026-03-07 06:23:06.825 +02:00 [DBG] Found key {b5b37556-f820-46e3-96cf-da10005d04c3}.
+2026-03-07 06:23:06.826 +02:00 [DBG] Found key {d07bea46-9efe-4f00-8bb8-cc33a29cfdd2}.
+2026-03-07 06:23:06.828 +02:00 [DBG] Found key {d897f534-e6bc-4869-91a2-e12e4a008fc7}.
+2026-03-07 06:23:06.834 +02:00 [DBG] Considering key {b5b37556-f820-46e3-96cf-da10005d04c3} with expiration date 2026-05-27 22:10:56Z as default key.
+2026-03-07 06:23:06.843 +02:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-03-07 06:23:06.850 +02:00 [DBG] Decrypting secret element using Windows DPAPI.
+2026-03-07 06:23:06.854 +02:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2026-03-07 06:23:06.859 +02:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2026-03-07 06:23:06.863 +02:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2026-03-07 06:23:06.869 +02:00 [DBG] Using key {b5b37556-f820-46e3-96cf-da10005d04c3} as the default key.
+2026-03-07 06:23:06.871 +02:00 [DBG] Key ring with default key {b5b37556-f820-46e3-96cf-da10005d04c3} was loaded during application startup.
+2026-03-07 06:23:06.881 +02:00 [DBG] Middleware loaded
+2026-03-07 06:23:06.885 +02:00 [DBG] Middleware loaded. Script /_framework/aspnetcore-browser-refresh.js (16513 B).
+2026-03-07 06:23:06.888 +02:00 [DBG] Middleware loaded. Script /_framework/blazor-hotreload.js (799 B).
+2026-03-07 06:23:06.970 +02:00 [DBG] Middleware configuration started with options: {AllowedHosts = *, AllowEmptyHosts = True, IncludeFailureMessage = True}
+2026-03-07 06:23:06.975 +02:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2026-03-07 06:23:06.993 +02:00 [DBG] Middleware loaded: DOTNET_MODIFIABLE_ASSEMBLIES=debug, __ASPNETCORE_BROWSER_TOOLS=true
+2026-03-07 06:23:07.243 +02:00 [INF] Now listening on: https://localhost:7221
+2026-03-07 06:23:07.248 +02:00 [INF] Now listening on: http://localhost:5117
+2026-03-07 06:23:07.253 +02:00 [DBG] Loaded hosting startup assembly E-Commerce.API
+2026-03-07 06:23:07.257 +02:00 [DBG] Loaded hosting startup assembly Microsoft.WebTools.ApiEndpointDiscovery
+2026-03-07 06:23:07.260 +02:00 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2026-03-07 06:23:07.261 +02:00 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2026-03-07 06:23:07.267 +02:00 [DBG] Executing API description provider 'EndpointMetadataApiDescriptionProvider' from assembly Microsoft.AspNetCore.Mvc.ApiExplorer v9.0.0.0.
+2026-03-07 06:23:07.272 +02:00 [DBG] Executing API description provider 'DefaultApiDescriptionProvider' from assembly Microsoft.AspNetCore.Mvc.ApiExplorer v9.0.0.0.
+2026-03-07 06:23:07.570 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-07 06:23:07.572 +02:00 [INF] Hosting environment: Development
+2026-03-07 06:23:07.573 +02:00 [INF] Content root path: D:\WebAPI\E-Commerce\E-Commerce.Solution\E-Commerce.API
+2026-03-07 06:23:07.573 +02:00 [DBG] Connection id "0HNJS04TV4E2V" received FIN.
+2026-03-07 06:23:07.574 +02:00 [DBG] Hosting started
+2026-03-07 06:23:07.580 +02:00 [DBG] Connection id "0HNJS04TV4E2V" accepted.
+2026-03-07 06:23:07.583 +02:00 [DBG] Connection id "0HNJS04TV4E2V" started.
+2026-03-07 06:23:07.597 +02:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-03-07 06:23:07.613 +02:00 [DBG] Connection id "0HNJS04TV4E2V" stopped.
+2026-03-07 06:23:07.618 +02:00 [DBG] Connection id "0HNJS04TV4E2V" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-03-07 06:23:08.534 +02:00 [DBG] Connection id "0HNJS04TV4E30" accepted.
+2026-03-07 06:23:08.537 +02:00 [DBG] Connection id "0HNJS04TV4E30" started.
+2026-03-07 06:23:08.682 +02:00 [DBG] Connection 0HNJS04TV4E30 established using the following protocol: "Tls13"
+2026-03-07 06:23:08.790 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/_framework/aspnetcore-browser-refresh.js - null null
+2026-03-07 06:23:08.790 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/_vs/browserLink - null null
+2026-03-07 06:23:08.862 +02:00 [DBG] Script injected: /_framework/aspnetcore-browser-refresh.js
+2026-03-07 06:23:08.868 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/_framework/aspnetcore-browser-refresh.js - 200 16513 application/javascript; charset=utf-8 88.3034ms
+2026-03-07 06:23:08.893 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/_vs/browserLink - 200 null text/javascript; charset=UTF-8 115.1449ms
+2026-03-07 06:23:08.937 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/swagger/v1/swagger.json - null null
+2026-03-07 06:23:09.004 +02:00 [DBG] No candidates found for the request path '/swagger/v1/swagger.json'
+2026-03-07 06:23:09.014 +02:00 [DBG] Request did not match any endpoints
+2026-03-07 06:23:09.130 +02:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2026-03-07 06:23:09.170 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 233.9116ms
+2026-03-07 06:23:14.888 +02:00 [DBG] Connection id "0HNJS04TV4E31" accepted.
+2026-03-07 06:23:14.890 +02:00 [DBG] Connection id "0HNJS04TV4E31" received FIN.
+2026-03-07 06:23:14.890 +02:00 [DBG] Connection id "0HNJS04TV4E31" started.
+2026-03-07 06:23:14.891 +02:00 [DBG] Connection id "0HNJS04TV4E32" accepted.
+2026-03-07 06:23:14.895 +02:00 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2026-03-07 06:23:14.895 +02:00 [DBG] Connection id "0HNJS04TV4E32" started.
+2026-03-07 06:23:14.899 +02:00 [DBG] Connection id "0HNJS04TV4E31" stopped.
+2026-03-07 06:23:14.901 +02:00 [DBG] Connection id "0HNJS04TV4E31" sending FIN because: "The Socket transport's send loop completed gracefully."
+2026-03-07 06:23:14.918 +02:00 [DBG] Connection 0HNJS04TV4E32 established using the following protocol: "Tls13"
+2026-03-07 06:23:14.921 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7221/api/Account/Login - application/json 60
+2026-03-07 06:23:14.933 +02:00 [DBG] 1 candidate(s) found for the request path '/api/Account/Login'
+2026-03-07 06:23:14.936 +02:00 [DBG] Endpoint 'E_Commerce.API.Controllers.AccountController.PostLogin (E-Commerce.API)' with route pattern 'api/Account/login' is valid for the request path '/api/Account/Login'
+2026-03-07 06:23:14.940 +02:00 [DBG] Request matched endpoint 'E_Commerce.API.Controllers.AccountController.PostLogin (E-Commerce.API)'
+2026-03-07 06:23:14.944 +02:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2026-03-07 06:23:14.967 +02:00 [DBG] Policy authentication schemes  did not succeed
+2026-03-07 06:23:14.973 +02:00 [DBG] Authorization was successful.
+2026-03-07 06:23:14.975 +02:00 [INF] Executing endpoint 'E_Commerce.API.Controllers.AccountController.PostLogin (E-Commerce.API)'
+2026-03-07 06:23:15.003 +02:00 [INF] Route matched with {action = "PostLogin", controller = "Account"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] PostLogin(E_Commerce.Core.DTO.IdentityDTO.LoginDTO) on controller E_Commerce.API.Controllers.AccountController (E-Commerce.API).
+2026-03-07 06:23:15.007 +02:00 [DBG] Execution plan of authorization filters (in the following order): ["None"]
+2026-03-07 06:23:15.009 +02:00 [DBG] Execution plan of resource filters (in the following order): ["None"]
+2026-03-07 06:23:15.011 +02:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+2026-03-07 06:23:15.013 +02:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2026-03-07 06:23:15.016 +02:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)"]
+2026-03-07 06:23:15.019 +02:00 [DBG] Executing controller factory for controller E_Commerce.API.Controllers.AccountController (E-Commerce.API)
+2026-03-07 06:23:15.023 +02:00 [DBG] Executed controller factory for controller E_Commerce.API.Controllers.AccountController (E-Commerce.API)
+2026-03-07 06:23:15.043 +02:00 [DBG] Attempting to bind parameter 'loginDTO' of type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO' ...
+2026-03-07 06:23:15.048 +02:00 [DBG] Attempting to bind parameter 'loginDTO' of type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO' using the name '' in request data ...
+2026-03-07 06:23:15.051 +02:00 [DBG] Selected input formatter 'Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter' for content type 'application/json'.
+2026-03-07 06:23:15.059 +02:00 [DBG] Connection id "0HNJS04TV4E32", Request id "0HNJS04TV4E32:00000001": started reading request body.
+2026-03-07 06:23:15.061 +02:00 [DBG] Connection id "0HNJS04TV4E32", Request id "0HNJS04TV4E32:00000001": done reading request body.
+2026-03-07 06:23:15.065 +02:00 [DBG] JSON input formatter succeeded, deserializing to type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO'
+2026-03-07 06:23:15.067 +02:00 [DBG] Done attempting to bind parameter 'loginDTO' of type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO'.
+2026-03-07 06:23:15.068 +02:00 [DBG] Done attempting to bind parameter 'loginDTO' of type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO'.
+2026-03-07 06:23:15.070 +02:00 [DBG] Attempting to validate the bound parameter 'loginDTO' of type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO' ...
+2026-03-07 06:23:15.079 +02:00 [DBG] Done attempting to validate the bound parameter 'loginDTO' of type 'E_Commerce.Core.DTO.IdentityDTO.LoginDTO'.
+2026-03-07 06:23:15.164 +02:00 [DBG] Entity Framework Core 9.0.11 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:9.0.11' with options: EngineType=SqlServer 
+2026-03-07 06:23:15.167 +02:00 [DBG] Creating DbConnection.
+2026-03-07 06:23:15.170 +02:00 [DBG] Created DbConnection. (2ms).
+2026-03-07 06:23:15.173 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.175 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.178 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:15.179 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:15.181 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2026-03-07 06:23:15.183 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-03-07 06:23:15.193 +02:00 [INF] Executed DbCommand (10ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-03-07 06:23:15.197 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'ApplicationUser' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:15.199 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.204 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 7ms reading results.
+2026-03-07 06:23:15.207 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.209 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (2ms).
+2026-03-07 06:23:15.340 +02:00 [DBG] Compiling query expression: 
+'DbSet<IdentityUserRole<Guid>>()
+    .Join(
+        inner: DbSet<ApplicationRole>(), 
+        outerKeySelector: userRole => userRole.RoleId, 
+        innerKeySelector: role => role.Id, 
+        resultSelector: (userRole, role) => new { 
+            userRole = userRole, 
+            role = role
+         })
+    .Where(<>h__TransparentIdentifier0 => <>h__TransparentIdentifier0.userRole.UserId.Equals(__userId_0))
+    .Select(<>h__TransparentIdentifier0 => <>h__TransparentIdentifier0.role.Name)'
+2026-03-07 06:23:15.384 +02:00 [DBG] Generated query execution expression: 
+'queryContext => SingleQueryingEnumerable.Create<string>(
+    relationalQueryContext: (RelationalQueryContext)queryContext, 
+    relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+        Projection Mapping:
+            EmptyProjectionMember -> 0
+        SELECT a0.Name
+        FROM AspNetUserRoles AS a
+        INNER JOIN AspNetRoles AS a0 ON a.RoleId == a0.Id
+        WHERE a.UserId == @__userId_0) | Resolver: c => new RelationalCommandCache(
+        c.Dependencies.MemoryCache, 
+        c.RelationalDependencies.QuerySqlGeneratorFactory, 
+        c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+        Projection Mapping:
+            EmptyProjectionMember -> 0
+        SELECT a0.Name
+        FROM AspNetUserRoles AS a
+        INNER JOIN AspNetRoles AS a0 ON a.RoleId == a0.Id
+        WHERE a.UserId == @__userId_0, 
+        False, 
+        new HashSet<string>(
+            new string[]{ }, 
+            StringComparer.Ordinal
+        )
+    )].GetRelationalCommandTemplate(parameters), 
+    readerColumns: null, 
+    shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+    {
+        string value1;
+        value1 = dataReader.IsDBNull(0) ? default(string) : dataReader.GetString(0);
+        return value1;
+    }, 
+    contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+    standAloneStateManager: False, 
+    detailedErrorsEnabled: False, 
+    threadSafetyChecksEnabled: True)'
+2026-03-07 06:23:15.389 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.391 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.394 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:15.395 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:15.397 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2026-03-07 06:23:15.399 +02:00 [DBG] Executing DbCommand [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0
+2026-03-07 06:23:15.406 +02:00 [INF] Executed DbCommand (8ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0
+2026-03-07 06:23:15.409 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.411 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 2ms reading results.
+2026-03-07 06:23:15.414 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.416 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (2ms).
+2026-03-07 06:23:15.550 +02:00 [DBG] Compiling query expression: 
+'DbSet<ApplicationUser>()
+    .FirstOrDefault(u => u.NormalizedUserName == __normalizedUserName_0)'
+2026-03-07 06:23:15.570 +02:00 [DBG] Generated query execution expression: 
+'queryContext => ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync<ApplicationUser>(
+    asyncEnumerable: SingleQueryingEnumerable.Create<ApplicationUser>(
+        relationalQueryContext: (RelationalQueryContext)queryContext, 
+        relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PersonName (string), 10], [Property: ApplicationUser.PhoneNumber (string), 11], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 12], [Property: ApplicationUser.RefreshToken (string), 13], [Property: ApplicationUser.RefreshTokenExpirationDateTime (DateTime?), 14], [Property: ApplicationUser.SecurityStamp (string), 15], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 16], [Property: ApplicationUser.UserName (string) MaxLength(256), 17], [Property: ApplicationUser.UserType (string) Required, 18] }
+            SELECT TOP(1) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PersonName, a.PhoneNumber, a.PhoneNumberConfirmed, a.RefreshToken, a.RefreshTokenExpirationDateTime, a.SecurityStamp, a.TwoFactorEnabled, a.UserName, a.UserType
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedUserName == @__normalizedUserName_0) | Resolver: c => new RelationalCommandCache(
+            c.Dependencies.MemoryCache, 
+            c.RelationalDependencies.QuerySqlGeneratorFactory, 
+            c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PersonName (string), 10], [Property: ApplicationUser.PhoneNumber (string), 11], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 12], [Property: ApplicationUser.RefreshToken (string), 13], [Property: ApplicationUser.RefreshTokenExpirationDateTime (DateTime?), 14], [Property: ApplicationUser.SecurityStamp (string), 15], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 16], [Property: ApplicationUser.UserName (string) MaxLength(256), 17], [Property: ApplicationUser.UserType (string) Required, 18] }
+            SELECT TOP(1) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PersonName, a.PhoneNumber, a.PhoneNumberConfirmed, a.RefreshToken, a.RefreshTokenExpirationDateTime, a.SecurityStamp, a.TwoFactorEnabled, a.UserName, a.UserType
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedUserName == @__normalizedUserName_0, 
+            False, 
+            new HashSet<string>(
+                new string[]{ }, 
+                StringComparer.Ordinal
+            )
+        )].GetRelationalCommandTemplate(parameters), 
+        readerColumns: null, 
+        shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+        {
+            ApplicationUser entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                ApplicationUser instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(ApplicationUser);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: ApplicationUser.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetGuid(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (ApplicationUser)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")]: 
+                            {
+                                return 
+                                {
+                                    ApplicationUser instance;
+                                    instance = new ApplicationUser();
+                                    instance.<Id>k__BackingField = dataReader.GetGuid(0);
+                                    instance.<AccessFailedCount>k__BackingField = dataReader.GetInt32(1);
+                                    instance.<ConcurrencyStamp>k__BackingField = dataReader.IsDBNull(2) ? default(string) : dataReader.GetString(2);
+                                    instance.<Email>k__BackingField = dataReader.IsDBNull(3) ? default(string) : dataReader.GetString(3);
+                                    instance.<EmailConfirmed>k__BackingField = dataReader.GetBoolean(4);
+                                    instance.<LockoutEnabled>k__BackingField = dataReader.GetBoolean(5);
+                                    instance.<LockoutEnd>k__BackingField = dataReader.IsDBNull(6) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue<DateTimeOffset>(6);
+                                    instance.<NormalizedEmail>k__BackingField = dataReader.IsDBNull(7) ? default(string) : dataReader.GetString(7);
+                                    instance.<NormalizedUserName>k__BackingField = dataReader.IsDBNull(8) ? default(string) : dataReader.GetString(8);
+                                    instance.<PasswordHash>k__BackingField = dataReader.IsDBNull(9) ? default(string) : dataReader.GetString(9);
+                                    instance.<PersonName>k__BackingField = dataReader.IsDBNull(10) ? default(string) : dataReader.GetString(10);
+                                    instance.<PhoneNumber>k__BackingField = dataReader.IsDBNull(11) ? default(string) : dataReader.GetString(11);
+                                    instance.<PhoneNumberConfirmed>k__BackingField = dataReader.GetBoolean(12);
+                                    instance.<RefreshToken>k__BackingField = dataReader.IsDBNull(13) ? default(string) : dataReader.GetString(13);
+                                    instance.<RefreshTokenExpirationDateTime>k__BackingField = dataReader.IsDBNull(14) ? default(DateTime?) : (DateTime?)dataReader.GetDateTime(14);
+                                    instance.<SecurityStamp>k__BackingField = dataReader.IsDBNull(15) ? default(string) : dataReader.GetString(15);
+                                    instance.<TwoFactorEnabled>k__BackingField = dataReader.GetBoolean(16);
+                                    instance.<UserName>k__BackingField = dataReader.IsDBNull(17) ? default(string) : dataReader.GetString(17);
+                                    instance.<UserType>k__BackingField = dataReader.GetString(18);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.IdentityEntities.ApplicationUser")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(ApplicationUser)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            return entity;
+        }, 
+        contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+        standAloneStateManager: False, 
+        detailedErrorsEnabled: False, 
+        threadSafetyChecksEnabled: True), 
+    cancellationToken: queryContext.CancellationToken)'
+2026-03-07 06:23:15.578 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.581 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.583 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:15.585 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:15.587 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2026-03-07 06:23:15.589 +02:00 [DBG] Executing DbCommand [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2026-03-07 06:23:15.596 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PersonName], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[RefreshToken], [a].[RefreshTokenExpirationDateTime], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName], [a].[UserType]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2026-03-07 06:23:15.600 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.601 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 2ms reading results.
+2026-03-07 06:23:15.603 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.605 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (1ms).
+2026-03-07 06:23:15.626 +02:00 [DBG] An entity of type 'ApplicationUser' tracked by 'ApplicationDbContext' changed state from '"Unchanged"' to '"Modified"'. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:15.632 +02:00 [DBG] SaveChanges starting for 'ApplicationDbContext'.
+2026-03-07 06:23:15.637 +02:00 [DBG] DetectChanges starting for 'ApplicationDbContext'.
+2026-03-07 06:23:15.658 +02:00 [DBG] DetectChanges completed for 'ApplicationDbContext'.
+2026-03-07 06:23:15.779 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.783 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.788 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:15.789 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:15.792 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2026-03-07 06:23:15.795 +02:00 [DBG] Executing DbCommand [Parameters=[@p18='?' (DbType = Guid), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p19='?' (Size = 4000), @p2='?' (Size = 256), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (DbType = DateTimeOffset), @p6='?' (Size = 256), @p7='?' (Size = 256), @p8='?' (Size = 4000), @p9='?' (Size = 4000), @p10='?' (Size = 4000), @p11='?' (DbType = Boolean), @p12='?' (Size = 4000), @p13='?' (DbType = DateTime2), @p14='?' (Size = 4000), @p15='?' (DbType = Boolean), @p16='?' (Size = 256), @p17='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [Email] = @p2, [EmailConfirmed] = @p3, [LockoutEnabled] = @p4, [LockoutEnd] = @p5, [NormalizedEmail] = @p6, [NormalizedUserName] = @p7, [PasswordHash] = @p8, [PersonName] = @p9, [PhoneNumber] = @p10, [PhoneNumberConfirmed] = @p11, [RefreshToken] = @p12, [RefreshTokenExpirationDateTime] = @p13, [SecurityStamp] = @p14, [TwoFactorEnabled] = @p15, [UserName] = @p16, [UserType] = @p17
+OUTPUT 1
+WHERE [Id] = @p18 AND [ConcurrencyStamp] = @p19;
+2026-03-07 06:23:15.814 +02:00 [INF] Executed DbCommand (19ms) [Parameters=[@p18='?' (DbType = Guid), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p19='?' (Size = 4000), @p2='?' (Size = 256), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (DbType = DateTimeOffset), @p6='?' (Size = 256), @p7='?' (Size = 256), @p8='?' (Size = 4000), @p9='?' (Size = 4000), @p10='?' (Size = 4000), @p11='?' (DbType = Boolean), @p12='?' (Size = 4000), @p13='?' (DbType = DateTime2), @p14='?' (Size = 4000), @p15='?' (DbType = Boolean), @p16='?' (Size = 256), @p17='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [Email] = @p2, [EmailConfirmed] = @p3, [LockoutEnabled] = @p4, [LockoutEnd] = @p5, [NormalizedEmail] = @p6, [NormalizedUserName] = @p7, [PasswordHash] = @p8, [PersonName] = @p9, [PhoneNumber] = @p10, [PhoneNumberConfirmed] = @p11, [RefreshToken] = @p12, [RefreshTokenExpirationDateTime] = @p13, [SecurityStamp] = @p14, [TwoFactorEnabled] = @p15, [UserName] = @p16, [UserType] = @p17
+OUTPUT 1
+WHERE [Id] = @p18 AND [ConcurrencyStamp] = @p19;
+2026-03-07 06:23:15.827 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.832 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 10ms reading results.
+2026-03-07 06:23:15.837 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.840 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (3ms).
+2026-03-07 06:23:15.850 +02:00 [DBG] An entity of type 'ApplicationUser' tracked by 'ApplicationDbContext' changed state from '"Modified"' to '"Unchanged"'. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:15.860 +02:00 [DBG] SaveChanges completed for 'ApplicationDbContext' with 1 entities written to the database.
+2026-03-07 06:23:15.873 +02:00 [DBG] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter"]
+2026-03-07 06:23:15.880 +02:00 [DBG] No information found on request to perform content negotiation.
+2026-03-07 06:23:15.882 +02:00 [DBG] Attempting to select an output formatter without using a content type as no explicit content types were specified for the response.
+2026-03-07 06:23:15.884 +02:00 [DBG] Attempting to select the first formatter in the output formatters list which can write the result.
+2026-03-07 06:23:15.886 +02:00 [DBG] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter' and content type 'application/json' to write the response.
+2026-03-07 06:23:15.889 +02:00 [INF] Executing OkObjectResult, writing value of type 'E_Commerce.Core.DTO.IdentityDTO.AuthenticationResponse'.
+2026-03-07 06:23:15.914 +02:00 [INF] Executed action E_Commerce.API.Controllers.AccountController.PostLogin (E-Commerce.API) in 891.7765ms
+2026-03-07 06:23:15.916 +02:00 [INF] Executed endpoint 'E_Commerce.API.Controllers.AccountController.PostLogin (E-Commerce.API)'
+2026-03-07 06:23:15.920 +02:00 [DBG] 'ApplicationDbContext' disposed.
+2026-03-07 06:23:15.924 +02:00 [DBG] Disposing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:15.927 +02:00 [DBG] Disposed connection to database '' on server '' (2ms).
+2026-03-07 06:23:15.930 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7221/api/Account/Login - 200 null application/json; charset=utf-8 1009.2211ms
+2026-03-07 06:23:39.515 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7221/api/Product - application/json null
+2026-03-07 06:23:39.563 +02:00 [DBG] 1 candidate(s) found for the request path '/api/Product'
+2026-03-07 06:23:39.565 +02:00 [DBG] Endpoint 'E_Commerce.API.Controllers.ProductController.GetAllProudct (E-Commerce.API)' with route pattern 'api/Product' is valid for the request path '/api/Product'
+2026-03-07 06:23:39.568 +02:00 [DBG] Request matched endpoint 'E_Commerce.API.Controllers.ProductController.GetAllProudct (E-Commerce.API)'
+2026-03-07 06:23:39.638 +02:00 [DBG] Successfully validated the token.
+2026-03-07 06:23:39.640 +02:00 [DBG] AuthenticationScheme: Bearer was successfully authenticated.
+2026-03-07 06:23:39.645 +02:00 [DBG] Authorization was successful.
+2026-03-07 06:23:39.646 +02:00 [INF] Executing endpoint 'E_Commerce.API.Controllers.ProductController.GetAllProudct (E-Commerce.API)'
+2026-03-07 06:23:39.652 +02:00 [INF] Route matched with {action = "GetAllProudct", controller = "Product"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] GetAllProudct() on controller E_Commerce.API.Controllers.ProductController (E-Commerce.API).
+2026-03-07 06:23:39.654 +02:00 [DBG] Execution plan of authorization filters (in the following order): ["None"]
+2026-03-07 06:23:39.656 +02:00 [DBG] Execution plan of resource filters (in the following order): ["None"]
+2026-03-07 06:23:39.657 +02:00 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+2026-03-07 06:23:39.659 +02:00 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2026-03-07 06:23:39.661 +02:00 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)"]
+2026-03-07 06:23:39.663 +02:00 [DBG] Executing controller factory for controller E_Commerce.API.Controllers.ProductController (E-Commerce.API)
+2026-03-07 06:23:39.677 +02:00 [DBG] Entity Framework Core 9.0.11 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:9.0.11' with options: EngineType=SqlServer 
+2026-03-07 06:23:39.808 +02:00 [DBG] Executed controller factory for controller E_Commerce.API.Controllers.ProductController (E-Commerce.API)
+2026-03-07 06:23:39.811 +02:00 [INF] GetAllProudct action Method of ProductController
+2026-03-07 06:23:39.821 +02:00 [DBG] Compiling query expression: 
+'DbSet<Product>()
+    .Include(x => x.Category)'
+2026-03-07 06:23:39.834 +02:00 [DBG] Including navigation: 'Product.Category'.
+2026-03-07 06:23:39.873 +02:00 [DBG] Generated query execution expression: 
+'queryContext => SingleQueryingEnumerable.Create<Product>(
+    relationalQueryContext: (RelationalQueryContext)queryContext, 
+    relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+        Client Projections:
+            0 -> Dictionary<IProperty, int> { [Property: Product.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Product.AvgRating (float) Required, 1], [Property: Product.CategoryId (Guid) Required FK Index, 2], [Property: Product.Description (string) Required MaxLength(500), 3], [Property: Product.Image (string) Required MaxLength(500), 4], [Property: Product.Name (string) Required MaxLength(50), 5], [Property: Product.Price (decimal) Required, 6], [Property: Product.ReviewCount (int) Required, 7], [Property: Product.StockQuantity (int) Required, 8] }
+            1 -> Dictionary<IProperty, int> { [Property: Category.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 9], [Property: Category.Description (string) Required MaxLength(500), 10], [Property: Category.Name (string) Required MaxLength(50), 11] }
+        SELECT p.Id, p.AvgRating, p.CategoryId, p.Description, p.Image, p.Name, p.Price, p.ReviewCount, p.StockQuantity, c.Id, c.Description, c.Name
+        FROM products AS p
+        INNER JOIN categories AS c ON p.CategoryId == c.Id) | Resolver: c => new RelationalCommandCache(
+        c.Dependencies.MemoryCache, 
+        c.RelationalDependencies.QuerySqlGeneratorFactory, 
+        c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+        Client Projections:
+            0 -> Dictionary<IProperty, int> { [Property: Product.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Product.AvgRating (float) Required, 1], [Property: Product.CategoryId (Guid) Required FK Index, 2], [Property: Product.Description (string) Required MaxLength(500), 3], [Property: Product.Image (string) Required MaxLength(500), 4], [Property: Product.Name (string) Required MaxLength(50), 5], [Property: Product.Price (decimal) Required, 6], [Property: Product.ReviewCount (int) Required, 7], [Property: Product.StockQuantity (int) Required, 8] }
+            1 -> Dictionary<IProperty, int> { [Property: Category.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 9], [Property: Category.Description (string) Required MaxLength(500), 10], [Property: Category.Name (string) Required MaxLength(50), 11] }
+        SELECT p.Id, p.AvgRating, p.CategoryId, p.Description, p.Image, p.Name, p.Price, p.ReviewCount, p.StockQuantity, c.Id, c.Description, c.Name
+        FROM products AS p
+        INNER JOIN categories AS c ON p.CategoryId == c.Id, 
+        False, 
+        new HashSet<string>(
+            new string[]{ }, 
+            StringComparer.Ordinal
+        )
+    )].GetRelationalCommandTemplate(parameters), 
+    readerColumns: null, 
+    shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+    {
+        Product entity;
+        Category entity;
+        entity = 
+        {
+            MaterializationContext materializationContext1;
+            IEntityType entityType1;
+            Product instance1;
+            InternalEntityEntry entry1;
+            bool hasNullKey1;
+            materializationContext1 = new MaterializationContext(
+                [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                queryContext.Context
+            );
+            instance1 = default(Product);
+            entry1 = queryContext.TryGetEntry(
+                key: [LIFTABLE Constant: Key: Product.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Product").FindPrimaryKey()], 
+                keyValues: new object[]{ (object)dataReader.GetGuid(0) }, 
+                throwOnNullKey: True, 
+                hasNullKey: hasNullKey1);
+            !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+            {
+                entityType1 = entry1.EntityType;
+                return instance1 = (Product)entry1.Entity;
+            } : 
+            {
+                ISnapshot shadowSnapshot1;
+                shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                entityType1 = [LIFTABLE Constant: EntityType: Product | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Product")];
+                instance1 = switch (entityType1)
+                {
+                    case [LIFTABLE Constant: EntityType: Product | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Product")]: 
+                        {
+                            return 
+                            {
+                                Product instance;
+                                instance = new Product();
+                                instance.<Id>k__BackingField = dataReader.GetGuid(0);
+                                instance.<AvgRating>k__BackingField = dataReader.GetFloat(1);
+                                instance.<CategoryId>k__BackingField = dataReader.GetGuid(2);
+                                instance.<Description>k__BackingField = dataReader.GetString(3);
+                                instance.<Image>k__BackingField = dataReader.GetString(4);
+                                instance.<Name>k__BackingField = dataReader.GetString(5);
+                                instance.<Price>k__BackingField = dataReader.GetDecimal(6);
+                                instance.<ReviewCount>k__BackingField = dataReader.GetInt32(7);
+                                instance.<StockQuantity>k__BackingField = dataReader.GetInt32(8);
+                                (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                    context: materializationContext1.Context, 
+                                    entity: instance, 
+                                    queryTrackingBehavior: TrackAll, 
+                                    structuralType: [LIFTABLE Constant: EntityType: Product | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Product")]) : default(void);
+                                return instance;
+                            }}
+                    default: 
+                        default(Product)
+                }
+                ;
+                entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                    entityType: entityType1, 
+                    entity: instance1, 
+                    snapshot: shadowSnapshot1);
+                return instance1;
+            } : default(void);
+            return instance1;
+        };
+        entity = 
+        {
+            MaterializationContext materializationContext2;
+            IEntityType entityType2;
+            Category instance2;
+            InternalEntityEntry entry2;
+            bool hasNullKey2;
+            materializationContext2 = new MaterializationContext(
+                [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                queryContext.Context
+            );
+            instance2 = default(Category);
+            entry2 = queryContext.TryGetEntry(
+                key: [LIFTABLE Constant: Key: Category.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Category").FindPrimaryKey()], 
+                keyValues: new object[]{ (object)dataReader.GetGuid(9) }, 
+                throwOnNullKey: True, 
+                hasNullKey: hasNullKey2);
+            !(hasNullKey2) ? entry2 != default(InternalEntityEntry) ? 
+            {
+                entityType2 = entry2.EntityType;
+                return instance2 = (Category)entry2.Entity;
+            } : 
+            {
+                ISnapshot shadowSnapshot2;
+                shadowSnapshot2 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                entityType2 = [LIFTABLE Constant: EntityType: Category | Resolver: namelessParameter{3} => namelessParameter{3}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Category")];
+                instance2 = switch (entityType2)
+                {
+                    case [LIFTABLE Constant: EntityType: Category | Resolver: namelessParameter{4} => namelessParameter{4}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Category")]: 
+                        {
+                            return 
+                            {
+                                Category instance;
+                                instance = new Category();
+                                instance.<Id>k__BackingField = dataReader.GetGuid(9);
+                                instance.<Description>k__BackingField = dataReader.GetString(10);
+                                instance.<Name>k__BackingField = dataReader.GetString(11);
+                                (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                    context: materializationContext2.Context, 
+                                    entity: instance, 
+                                    queryTrackingBehavior: TrackAll, 
+                                    structuralType: [LIFTABLE Constant: EntityType: Category | Resolver: namelessParameter{5} => namelessParameter{5}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Category")]) : default(void);
+                                return instance;
+                            }}
+                    default: 
+                        default(Category)
+                }
+                ;
+                entry2 = entityType2 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                    entityType: entityType2, 
+                    entity: instance2, 
+                    snapshot: shadowSnapshot2);
+                return instance2;
+            } : default(void);
+            return instance2;
+        };
+        ShaperProcessingExpressionVisitor.IncludeReference<Product, Product, Category>(
+            queryContext: queryContext, 
+            entity: entity, 
+            relatedEntity: entity, 
+            navigation: [LIFTABLE Constant: Navigation: Product.Category (Category) ToPrincipal Category Inverse: Products | Resolver: namelessParameter{6} => namelessParameter{6}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Product").FindNavigation("Category")], 
+            inverseNavigation: [LIFTABLE Constant: Navigation: Category.Products (ICollection<Product>) Collection ToDependent Product Inverse: Category | Resolver: namelessParameter{7} => namelessParameter{7}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Category").FindNavigation("Products")], 
+            fixup: (namelessParameter{8}, namelessParameter{9}) => 
+            {
+                namelessParameter{8}.<Category>k__BackingField = namelessParameter{9};
+                return [LIFTABLE Constant: ClrICollectionAccessor<Category, ICollection<Product>, Product> | Resolver: namelessParameter{10} => namelessParameter{10}.Dependencies.Model.FindEntityType("E_Commerce.Core.Domain.Entities.Category").FindNavigation("Products").GetCollectionAccessor()].Add(
+                    entity: namelessParameter{9}, 
+                    value: namelessParameter{8}, 
+                    forMaterialization: True);
+            }, 
+            trackingQuery: True);
+        return entity;
+    }, 
+    contextType: E_Commerce.Infrastructure.Data.DBContext.ApplicationDbContext, 
+    standAloneStateManager: False, 
+    detailedErrorsEnabled: False, 
+    threadSafetyChecksEnabled: True)'
+2026-03-07 06:23:39.882 +02:00 [DBG] Creating DbConnection.
+2026-03-07 06:23:39.884 +02:00 [DBG] Created DbConnection. (1ms).
+2026-03-07 06:23:39.886 +02:00 [DBG] Opening connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:39.887 +02:00 [DBG] Opened connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:39.889 +02:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2026-03-07 06:23:39.891 +02:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2026-03-07 06:23:39.893 +02:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2026-03-07 06:23:39.895 +02:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[AvgRating], [p].[CategoryId], [p].[Description], [p].[Image], [p].[Name], [p].[Price], [p].[ReviewCount], [p].[StockQuantity], [c].[Id], [c].[Description], [c].[Name]
+FROM [products] AS [p]
+INNER JOIN [categories] AS [c] ON [p].[CategoryId] = [c].[Id]
+2026-03-07 06:23:39.906 +02:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[AvgRating], [p].[CategoryId], [p].[Description], [p].[Image], [p].[Name], [p].[Price], [p].[ReviewCount], [p].[StockQuantity], [c].[Id], [c].[Description], [c].[Name]
+FROM [products] AS [p]
+INNER JOIN [categories] AS [c] ON [p].[CategoryId] = [c].[Id]
+2026-03-07 06:23:39.919 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'Product' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:39.963 +02:00 [DBG] The navigation 'Product.Category' was detected as changed. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:39.976 +02:00 [DBG] Context 'ApplicationDbContext' started tracking 'Category' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2026-03-07 06:23:39.985 +02:00 [DBG] Closing data reader to 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:39.990 +02:00 [DBG] A data reader for 'E-Commerce' on server 'DESKTOP-97N4QKB' is being disposed after spending 81ms reading results.
+2026-03-07 06:23:39.992 +02:00 [DBG] Closing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:39.995 +02:00 [DBG] Closed connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB' (2ms).
+2026-03-07 06:23:40.020 +02:00 [DBG] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter"]
+2026-03-07 06:23:40.024 +02:00 [DBG] No information found on request to perform content negotiation.
+2026-03-07 06:23:40.026 +02:00 [DBG] Attempting to select an output formatter without using a content type as no explicit content types were specified for the response.
+2026-03-07 06:23:40.027 +02:00 [DBG] Attempting to select the first formatter in the output formatters list which can write the result.
+2026-03-07 06:23:40.028 +02:00 [DBG] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter' and content type 'application/json' to write the response.
+2026-03-07 06:23:40.030 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[E_Commerce.Core.DTO.ProductDTO.ProductResponse, E-Commerce.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-07 06:23:40.050 +02:00 [INF] Executed action E_Commerce.API.Controllers.ProductController.GetAllProudct (E-Commerce.API) in 387.0899ms
+2026-03-07 06:23:40.054 +02:00 [INF] Executed endpoint 'E_Commerce.API.Controllers.ProductController.GetAllProudct (E-Commerce.API)'
+2026-03-07 06:23:40.055 +02:00 [DBG] 'ApplicationDbContext' disposed.
+2026-03-07 06:23:40.057 +02:00 [DBG] Disposing connection to database 'E-Commerce' on server 'DESKTOP-97N4QKB'.
+2026-03-07 06:23:40.059 +02:00 [DBG] Disposed connection to database '' on server '' (2ms).
+2026-03-07 06:23:40.061 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7221/api/Product - 200 null application/json; charset=utf-8 545.9536ms

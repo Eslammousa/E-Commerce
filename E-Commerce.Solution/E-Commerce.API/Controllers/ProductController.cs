@@ -10,9 +10,11 @@ namespace E_Commerce.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductsService _productsService;
-        public ProductController(IProductsService productsService)
+        private readonly ILogger<ProductController> _logger;
+        public ProductController(IProductsService productsService , ILogger<ProductController> logger)
         {
             _productsService = productsService;
+            _logger = logger;
         }
 
         [Authorize(Roles = "Admin")]
@@ -37,6 +39,7 @@ namespace E_Commerce.API.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAllProudct()
         {
+            _logger.LogInformation("GetAllProudct action Method of ProductController");
             return Ok(await _productsService.GetAllProudcts());
         }
 

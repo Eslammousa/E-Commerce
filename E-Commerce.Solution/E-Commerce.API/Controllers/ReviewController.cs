@@ -21,5 +21,14 @@ namespace E_Commerce.API.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("{ReviewId:guid}")]
+        public async Task<ActionResult> DeleteReview(Guid ReviewId)
+        {
+            await _reviewService.DeleteReview(ReviewId);
+            return NoContent();
+        }
+
+
+
     }
 }
