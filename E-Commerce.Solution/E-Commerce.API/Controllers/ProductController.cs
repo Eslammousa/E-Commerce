@@ -22,9 +22,8 @@ namespace E_Commerce.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult> AddProduct([FromForm] ProductAddRequest productAddRequest)
         {
-            var addedProduct = await _productsService.AddProduct(productAddRequest);
-            // return CreatedAtAction("GetProductByProductId", new { id = addedProduct.Id }, addedProduct);
 
+            var addedProduct = await _productsService.AddProduct(productAddRequest);
             return Ok(addedProduct);
         }
 
@@ -36,6 +35,20 @@ namespace E_Commerce.API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{id:guid}")]
+        public async Task<ActionResult> RestoreProduct([FromRoute] Guid id)
+        {
+             await _productsService.RestoreProduct(id);
+            return NoContent();
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetProductsDeleted")]
+        public async Task<ActionResult> GetProductsDeleted()
+        {
+            return Ok(await _productsService.GetDeletedProducts());
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetAllProudct()
         {
@@ -44,20 +57,21 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpGet("ProudctsByoneCategory/{CategoryId:guid}")]
-        public async Task<ActionResult> GetAllProudctByCategoryId(Guid CategoryId)
+        public async Task<ActionResult> GetAllProudctByCategoryId([FromRoute] Guid CategoryId)
         {
             return Ok(await _productsService.GetAllProudctsByCategoryId(CategoryId));
         }
 
         [HttpGet("{ProudctId:guid}")]
-        public async Task<ActionResult> GetProductByProudctId(Guid ProudctId)
+        public async Task<ActionResult> GetProductByProudctId([FromRoute]  Guid ProudctId)
         {
             return Ok(await _productsService.GetProductByProductId(ProudctId));
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut]
-        public async Task<ActionResult> UpdateProduct(Guid Id, ProudctUpdateRequest proudctUpdateRequest)
+        [HttpPut("{Id:Guid}")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> UpdateProduct([FromRoute] Guid Id, [FromForm] ProudctUpdateRequest proudctUpdateRequest)
         {
             await _productsService.UpdateProduct(Id, proudctUpdateRequest);
             return NoContent();

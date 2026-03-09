@@ -49,7 +49,7 @@ namespace E_Commerce.Core.Services
             await _unitOfWork.SaveAsync();
 
             var existingReviewWithUser = await _reviewRepository.FindAsync
-                (x => x.Id == review.Id, x => x.User);
+                (x => x.Id == review.Id, false,  x => x.User);
 
 
             return _mapper.Map<ReviewResponse>(existingReviewWithUser);
@@ -71,7 +71,7 @@ namespace E_Commerce.Core.Services
             if (review.UserId != userId)
                 throw new UnauthorizedAccessException("You are not authorized to delete this review");
 
-            var product = await _ProudctRepo.FindAsync(x => x.Id == review.ProductId , x=>x.Reviews);
+            var product = await _ProudctRepo.FindAsync(x => x.Id == review.ProductId ,false, x=>x.Reviews);
 
             if (product != null)
             {

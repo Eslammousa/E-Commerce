@@ -36,7 +36,7 @@ namespace E_Commerce.Core.Services
             var ProudctEntity = _mapper.Map<Product>(productAddRequest);
             ProudctEntity.Id = Guid.NewGuid();
 
-            ProudctEntity.Image = await _imageService.SaveProductImageAsync(productAddRequest.Image);
+            ProudctEntity.Image = await _imageService.SaveImageAsync(productAddRequest.Image , "products");
 
 
             var addedProduct = await _genericRepository.AddAsync(ProudctEntity);
@@ -54,13 +54,13 @@ namespace E_Commerce.Core.Services
 
             if (proudct == null) throw new EntityNotFoundException($"Product with id {Id} not found");
 
-            await _imageService.DeleteProductImageAsync(proudct.Image);
+       //     await _imageService.DeleteImageAsync(proudct.Image);
 
-            var deleted = await _genericRepository.DeleteByIdAsync(Id);
+        //    var deleted = await _genericRepository.DeleteByIdAsync(Id);
+            proudct.IsDeleted = true;
             await _unitOfWork.SaveAsync();
-            if (!deleted) throw new EntityNotFoundException($"Category with id {Id} not found");
 
-            return deleted;
+            return true;
 
         }
 
@@ -78,9 +78,19 @@ namespace E_Commerce.Core.Services
 
             if (proudct == null) throw new EntityNotFoundException($"Category with id {categoryId} not found");
 
-            var result = await _genericRepository.WhereAsync(x => x.CategoryId == categoryId
+            var result = await _genericRepository.WhereAsync(x => x.CategoryId == categoryId , false
             , x => x.Category);
             return _mapper.Map<IEnumerable<ProductResponse>>(result);
+        }
+
+        public async Task<IEnumerable<ProductResponse>> GetDeletedProducts()
+        {
+            var Products = await _unitOfWork.Products
+                .WhereAsync(x => x.IsDeleted , true, x => x.Category);
+            if (Products == null || !Products.Any()) throw new EntityNotFoundException($"No deleted products found");
+
+            var OrderedProducts = Products.OrderByDescending(x => x.DeletedAt);
+            return _mapper.Map<IEnumerable<ProductResponse>>(OrderedProducts);
         }
 
         public async Task<ResponseProductWithReview> GetProductByProductId(Guid id)
@@ -102,19 +112,30 @@ namespace E_Commerce.Core.Services
             return _mapper.Map<ProductResponse>(proudct);
         }
 
+        public async Task<bool> RestoreProduct(Guid Id)
+        {
+            if (Id == Guid.Empty) throw new InvalidIdException($"Id {Id} Can't be Empty");
+            var proudct =await _genericRepository.FindAsync(x => x.Id == Id , true);
+
+            if (proudct == null) throw new EntityNotFoundException($"Product with id {Id} not found");
+            proudct.IsDeleted = false;
+            await _unitOfWork.SaveAsync();
+            return true;
+        }
+
         public async Task<IEnumerable<ProductResponse>> Search(string keyword)
         {
             var result = await _genericRepository.WhereAsync(
        p => p.Name.Contains(keyword) ||
             (p.Description != null && p.Description.Contains(keyword)),
-       p => p.Category);
+       false,  p => p.Category);
 
             return _mapper.Map<IEnumerable<ProductResponse>>(result);
         }
 
         public async Task<ProductResponse> UpdateProduct(Guid Id, ProudctUpdateRequest proudctUpdateRequest)
         {
-            var proudct = await _genericRepository.FindAsync(x => x.Id == Id, x => x.Category);
+            var proudct = await _genericRepository.FindAsync(x => x.Id == Id, false, x => x.Category);
 
             if (proudct == null) throw new EntityNotFoundException($"Product with id {Id} not found");
 
@@ -123,7 +144,7 @@ namespace E_Commerce.Core.Services
             if (existingCategoryByName != null && existingCategoryByName.Id != Id)
                 throw new DuplicateEntityException($"Category '{proudctUpdateRequest.Name}' already exists.");
 
-            var NewImage = await _imageService.UpdateProductImageAsync(proudctUpdateRequest.Image, proudct.Image);
+            var NewImage = await _imageService.UpdateImageAsync(proudctUpdateRequest.Image, proudct.Image , "products");
 
             var ProudctEntity = _mapper.Map<Product>(proudctUpdateRequest);
 

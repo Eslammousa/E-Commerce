@@ -2,6 +2,7 @@
 using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.Domain.RepositoryContracts;
 using E_Commerce.Core.DTO.CategoryDTO;
+using E_Commerce.Core.DTO.ProductDTO;
 using E_Commerce.Core.Exceptions;
 using E_Commerce.Core.ServicesContracts;
 
@@ -11,28 +12,29 @@ namespace E_Commerce.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IImageService _imageService;
 
-        public CategoriesService(IMapper mapper, IUnitOfWork unitOfWork)
+        public CategoriesService(IMapper mapper, IUnitOfWork unitOfWork, IImageService imageService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _imageService = imageService;
         }
-
 
         public async Task<CategoryResponse> AddCategory(CategoryAddRequest categoryAddRquest)
         {
-            // convert CategoryAddRequest to Category 
             var categoryEntity = _mapper.Map<Category>(categoryAddRquest);
             categoryEntity.Id = Guid.NewGuid();
 
             var existingCategory = await _unitOfWork.Categories.FindAsync(x=>x.Name == categoryEntity.Name);
             if (existingCategory != null) throw new DuplicateEntityException($"Category'{categoryEntity.Name}' already exists.");
 
-            // call repository method to add category
+   
+             categoryEntity.Image = await _imageService.SaveImageAsync(categoryAddRquest.Image, "categories");
+            
             var addedCategory = await _unitOfWork.Categories.AddAsync(categoryEntity);
 
             await _unitOfWork.SaveAsync();
-            // convert added Category to CategoryResponse 
             return _mapper.Map<CategoryResponse>(addedCategory);
 
 
@@ -64,8 +66,13 @@ namespace E_Commerce.Core.Services
             if (existingCategoryByName != null && existingCategoryByName.Id != categoryId)
                 throw new DuplicateEntityException($"Category '{categoryUpdateRequest.Name}' already exists.");
 
+            var NewImage = await _imageService.UpdateImageAsync(categoryUpdateRequest.Image, existingCategory.Image, "categories");
+
+
             existingCategory.Name = categoryUpdateRequest.Name;
             existingCategory.Description = categoryUpdateRequest.Description;
+            existingCategory.Image = NewImage;
+
 
             var updateCategory = await _unitOfWork.Categories.UpdateAsync(existingCategory);
 
@@ -77,7 +84,13 @@ namespace E_Commerce.Core.Services
         {
             if (categoryId == Guid.Empty) throw new InvalidIdException($"Id {categoryId} Can't be Empty");
 
+            var category = await _unitOfWork.Categories.FindAsync(x => x.Id == categoryId);
+
+            if (category == null) throw new EntityNotFoundException($"Product with id {categoryId} not found");
+
+            await _imageService.DeleteImageAsync(category.Image);
             var result = await _unitOfWork.Categories.DeleteByIdAsync(categoryId);
+
 
             await _unitOfWork.SaveAsync();
 
@@ -85,6 +98,8 @@ namespace E_Commerce.Core.Services
 
             return result;
         }
+
+        public 
 
       
     }

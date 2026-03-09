@@ -23,33 +23,34 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpGet("{categoryId:guid}")]
-        public async Task<ActionResult> GetCategoryById(Guid categoryId)
+        public async Task<ActionResult> GetCategoryById([FromRoute] Guid categoryId)
         { 
             return Ok(await _categoriesService.GetCategoryById(categoryId));
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult> AddCategory(CategoryAddRequest categoryAddRequest)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> AddCategory([FromForm]CategoryAddRequest categoryAddRequest)
         {
             var result = await _categoriesService.AddCategory(categoryAddRequest);
-             return CreatedAtAction(nameof(GetAllCategories), new { id = result.Id },result);
-           // return Ok(result);
+             return Ok(result);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{categoryId:guid}")]
-        public async Task<ActionResult> UpdateCategory(Guid categoryId, CategoryUpdateRequest categoryUpdateRequest)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> UpdateCategory([FromRoute] Guid categoryId, [FromForm] CategoryUpdateRequest categoryUpdateRequest)
         {
             var result = await _categoriesService.UpdateCategory(categoryId ,categoryUpdateRequest);
-            return NoContent();
+            return Ok(result);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{categoryId:guid}")]
-        public async Task<ActionResult> DeleteCategoryById(Guid categoryId)
+        public async Task<ActionResult> DeleteCategoryById([FromRoute] Guid categoryId)
         {
-            var result = await _categoriesService.DeleteCategoryById(categoryId);
+            await _categoriesService.DeleteCategoryById(categoryId);
             return NoContent();
         }
     }

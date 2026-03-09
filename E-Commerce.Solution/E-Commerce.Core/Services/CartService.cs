@@ -122,7 +122,8 @@ namespace E_Commerce.Core.Services
                 throw new InvalidQuantityException("Quantity must be greater than zero");
 
             var cartItem = await _cartItemRepo.FindAsync(
-                ci => ci.Id == cartItemId,
+                ci => ci.Id == cartItemId
+                ,false,
                 ci => ci.Product,
                 ci => ci.Cart
             );
@@ -150,6 +151,7 @@ namespace E_Commerce.Core.Services
         {
             var cartItem = await _cartItemRepo.FindAsync(
                 ci => ci.Id == cartItemId,
+                false,
                 ci => ci.Cart
             );
 

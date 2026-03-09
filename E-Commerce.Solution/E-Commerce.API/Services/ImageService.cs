@@ -12,7 +12,7 @@ namespace E_Commerce.API.Services
             _env = env;
         }
 
-        public async Task<string> SaveProductImageAsync(IFormFile image)
+        public async Task<string> SaveImageAsync(IFormFile image, string folderName)
         {
             if (image == null || image.Length == 0)
                 throw new InvalidImageTypeException("Image is required");
@@ -20,7 +20,7 @@ namespace E_Commerce.API.Services
             if (string.IsNullOrWhiteSpace(_env.WebRootPath))
                 throw new Exception("WebRootPath is not configured");
 
-            var folderPath = Path.Combine(_env.WebRootPath, "images", "products");
+            var folderPath = Path.Combine(_env.WebRootPath, "images", folderName);
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
@@ -40,10 +40,10 @@ namespace E_Commerce.API.Services
             using var stream = new FileStream(fullPath, FileMode.CreateNew);
             await image.CopyToAsync(stream);
 
-            return $"images/products/{fileName}";
+            return $"images/{folderName}/{fileName}";
         }
 
-        public async Task DeleteProductImageAsync(string imagePath)
+        public async Task DeleteImageAsync(string imagePath)
         {
             if (string.IsNullOrWhiteSpace(imagePath))
                 return;
@@ -64,20 +64,17 @@ namespace E_Commerce.API.Services
                 await Task.Run(() => File.Delete(file));
         }
 
-        public async Task<string> UpdateProductImageAsync(IFormFile newImage, string? oldImagePath)
+        public async Task<string> UpdateImageAsync(IFormFile newImage, string? oldImagePath, string folderName)
         {
             if (newImage == null || newImage.Length == 0)
                 throw new InvalidImageTypeException("Image is required");
 
             if (!string.IsNullOrWhiteSpace(oldImagePath))
-                await DeleteProductImageAsync(oldImagePath);
+                await DeleteImageAsync(oldImagePath);
 
-            var newImagePath = await SaveProductImageAsync(newImage);
+            var newImagePath = await SaveImageAsync(newImage, folderName);
 
             return newImagePath;
         }
-
-
-
     }
 }

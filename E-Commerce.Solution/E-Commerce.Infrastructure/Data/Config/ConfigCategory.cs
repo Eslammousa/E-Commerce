@@ -15,6 +15,11 @@ namespace E_Commerce.Infrastructure.Data.Config
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.Property(p => p.Image)
+                .HasColumnType("nvarchar")
+                .HasMaxLength(500)
+                .IsRequired();
+
             builder.Property(p => p.Description)
                .HasColumnType("nvarchar")
                  .HasMaxLength(500)

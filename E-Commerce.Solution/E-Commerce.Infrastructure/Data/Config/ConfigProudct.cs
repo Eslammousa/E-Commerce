@@ -34,6 +34,10 @@ namespace E_Commerce.Infrastructure.Data.Config
                 .HasMaxLength(500)
                 .IsRequired();
 
+           builder.Property(x=>x.IsDeleted).IsRequired();
+
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)

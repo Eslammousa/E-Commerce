@@ -7,7 +7,8 @@ namespace E_Commerce.Core.ServicesContracts
         Task<ProductResponse> AddProduct(ProductAddRequest productAddRequest);
         Task<ProductResponse> UpdateProduct(Guid Id ,ProudctUpdateRequest proudctUpdateRequest);
         Task<bool> DeleteProduct(Guid Id);
-
+        Task<bool> RestoreProduct(Guid Id);
+        Task<IEnumerable<ProductResponse>> GetDeletedProducts();
 
         Task<ResponseProductWithReview> GetProductByProductId(Guid id);
         Task<ProductResponse> GetProductByProductName(string name);

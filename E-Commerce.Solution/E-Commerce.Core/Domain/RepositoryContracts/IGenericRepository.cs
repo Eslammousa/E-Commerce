@@ -8,9 +8,9 @@ namespace E_Commerce.Core.Domain.RepositoryContracts
 
         Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
 
-        Task<IEnumerable<T>> WhereAsync(Expression<Func<T, bool>> match, params Expression<Func<T, object>>[] includes);
+        Task<IEnumerable<T>> WhereAsync(Expression<Func<T, bool>> match, bool ignoreFilters = false, params Expression<Func<T, object>>[] includes);
 
-        Task<T?> FindAsync(Expression<Func<T, bool>> match, params Expression<Func<T, object>>[] includes);
+        Task<T?> FindAsync(Expression<Func<T, bool>> match , bool ignoreFilters = false, params Expression<Func<T, object>>[] includes);
 
         Task<T>UpdateAsync(T Object);
 

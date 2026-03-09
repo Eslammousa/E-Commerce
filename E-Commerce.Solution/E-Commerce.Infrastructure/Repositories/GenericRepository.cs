@@ -33,9 +33,12 @@ namespace E_Commerce.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<T?> FindAsync(Expression<Func<T, bool>> match, params Expression<Func<T, object>>[] includes)
+        public async Task<T?> FindAsync(Expression<Func<T, bool>> match, bool ignoreFilters = false, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
+
+            if (ignoreFilters)
+                query = query.IgnoreQueryFilters();
 
             if (includes != null && includes.Any())
                 foreach (var include in includes)
@@ -44,9 +47,13 @@ namespace E_Commerce.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(match);
         }
 
-        public async Task<IEnumerable<T>> WhereAsync(Expression<Func<T, bool>> match, params Expression<Func<T, object>>[] includes)
+        public async Task<IEnumerable<T>> WhereAsync(Expression<Func<T, bool>> match , bool ignoreFilters = false
+            , params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
+
+            if (ignoreFilters)
+                query = query.IgnoreQueryFilters();
 
             if (includes != null && includes.Any())
                 foreach (var include in includes)

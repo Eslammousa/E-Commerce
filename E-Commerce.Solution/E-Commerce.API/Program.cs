@@ -42,7 +42,7 @@ var connectionString =
     ?? throw new InvalidOperationException("Connection string 'constr' not found!");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString).AddInterceptors());
 
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 

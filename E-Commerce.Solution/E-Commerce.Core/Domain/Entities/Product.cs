@@ -1,6 +1,8 @@
-﻿namespace E_Commerce.Core.Domain.Entities
+﻿using E_Commerce.Core.ServicesContracts;
+
+namespace E_Commerce.Core.Domain.Entities
 {
-    public class Product : BaseClass
+    public class Product : BaseClass , ISoftDeleteable 
     {    
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
@@ -14,7 +16,7 @@
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-
-
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get ; set ; }
     }
 }
