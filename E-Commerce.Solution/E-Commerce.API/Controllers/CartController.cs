@@ -32,15 +32,13 @@ namespace E_Commerce.API.Controllers
         [HttpGet]
         public async Task<ActionResult> GetCart()
         {
-           
-
             var result = await _cartService.GetCartByUserId();
 
             return Ok(result);
         }
 
         [HttpDelete("{cartItemId:guid}")]
-        public async Task<ActionResult> DeleteCartItem(Guid cartItemId)
+        public async Task<ActionResult> DeleteCartItem([FromRoute] Guid cartItemId)
         {
 
             await _cartService.RemoveFromCart(cartItemId);
@@ -49,12 +47,10 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpPut("{cartItemId:guid}")]
-        public async Task<ActionResult> UpdateCartItem(Guid cartItemId, [FromBody] UpdateCartItemRequest request)
+        public async Task<ActionResult> UpdateCartItem([FromRoute] Guid cartItemId, [FromBody] UpdateCartItemRequest request)
         {
          
-
             var result = await _cartService.EditCartItem(cartItemId, request.Quantity);
-
             return Ok(result);
         }
     }

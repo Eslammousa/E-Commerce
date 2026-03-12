@@ -24,7 +24,7 @@ namespace E_Commerce.API.Controllers
 
         [HttpPost("register")]
         [Authorize(policy: "NotAuthorized")]
-        public async Task<ActionResult> Register(RegisterDTO registerDTO)
+        public async Task<ActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
 
             var user = new ApplicationUser
@@ -62,7 +62,7 @@ namespace E_Commerce.API.Controllers
         [HttpPost("login")]
         [Authorize("NotAuthorized")]
         //[AllowAnonymous]
-        public async Task<ActionResult> PostLogin(LoginDTO loginDTO)
+        public async Task<ActionResult> PostLogin([FromBody] LoginDTO loginDTO)
         {
 
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
@@ -121,7 +121,7 @@ namespace E_Commerce.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("generate-new-jwt-token")]
-        public async Task<ActionResult> GenerateNewAccessToken(TokenModel tokenModel)
+        public async Task<ActionResult> GenerateNewAccessToken([FromBody] TokenModel tokenModel)
         {
             if (tokenModel == null ||
                 string.IsNullOrWhiteSpace(tokenModel.AccessToken) ||
@@ -166,7 +166,7 @@ namespace E_Commerce.API.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> IsEmailAlreadyRegistered(string email)
+        public async Task<ActionResult> IsEmailAlreadyRegistered([FromQuery] string email)
         {
             ApplicationUser? user = await _userManager.FindByEmailAsync(email);
 
@@ -183,7 +183,7 @@ namespace E_Commerce.API.Controllers
 
         [Authorize(Roles = AppRoles.Admin)]
         [HttpPut("change-role")]
-        public async Task<ActionResult> ChangeUserRole(ChangeUserRoleDTO dto)
+        public async Task<ActionResult> ChangeUserRole([FromBody] ChangeUserRoleDTO dto)
         {
             var user = await _userManager.FindByIdAsync(dto.UserId);
             if (user == null) return NotFound();

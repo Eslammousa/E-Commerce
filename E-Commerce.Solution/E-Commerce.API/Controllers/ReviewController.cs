@@ -15,14 +15,14 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpPost("{ProductId:guid}")]
-        public async Task<ActionResult> AddReview(Guid ProductId, [FromBody] ReviewAddRequest reviewAddRequest)
+        public async Task<ActionResult> AddReview([FromRoute] Guid ProductId, [FromBody] ReviewAddRequest reviewAddRequest)
         {
             var result = await _reviewService.AddReviewAsync(ProductId, reviewAddRequest);
             return Ok(result);
         }
 
         [HttpDelete("{ReviewId:guid}")]
-        public async Task<ActionResult> DeleteReview(Guid ReviewId)
+        public async Task<ActionResult> DeleteReview([FromRoute] Guid ReviewId)
         {
             await _reviewService.DeleteReview(ReviewId);
             return NoContent();

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using E_Commerce.Core.Common;
 using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.Domain.Enums;
 using E_Commerce.Core.Domain.RepositoryContracts;
+using E_Commerce.Core.DTO;
 using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 using E_Commerce.Core.Exceptions;
@@ -13,26 +15,15 @@ namespace E_Commerce.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IGenericRepository<Order> _orderRepository;
-        private readonly IGenericRepository<Address> _AdressRepo;
-        private readonly IGenericRepository<CartItem> _cartItemRepo;
-        private readonly ICartRepositroy _cartRepository;
-        private readonly IOrderRepository _orderRepo;
         private readonly ICurrentUserService _currentUser;
 
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepository<Order> orderRepository,
-            ICartRepositroy cartRepositroy, IGenericRepository<CartItem> cartItemRepo, IOrderRepository orderRepo
-            , ICurrentUserService currentUser, IGenericRepository<Address> adressRepo)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper
+            , ICurrentUserService currentUser)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _orderRepository = orderRepository;
-            _cartRepository = cartRepositroy;
-            _cartItemRepo = cartItemRepo;
-            _orderRepo = orderRepo;
             _currentUser = currentUser;
-            _AdressRepo = adressRepo;
         }
 
         public async Task<OrderResponse> CancelOrder(Guid orderId)
@@ -43,7 +34,9 @@ namespace E_Commerce.Core.Services
             if (orderId == Guid.Empty)
                 throw new InvalidIdException("Invalid id");
 
-            var order = await _orderRepo.GetOrderDetailsAsync(orderId, userId);
+            //   var order = await _orderRepo.GetOrderDetailsAsync(orderId, userId);
+            var order = await _unitOfWork.Orders.FindAsync(x => x.Id == orderId && x.UserId == userId
+            , isTracked: true, include: "OrderItems.Product");
 
             if (order == null)
                 throw new EntityNotFoundException("Order not found");
@@ -66,119 +59,172 @@ namespace E_Commerce.Core.Services
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("UserId cannot be empty.");
 
-            var cart = await _cartRepository.GetCartWithItemsAsync(userId);
+            await _unitOfWork.BeginTransactionAsync();
 
-            if (cart == null || !cart.CartItems.Any()) throw new InvalidOperationException("Cart is empty");
-
-            Address address;
-
-            if (request.AddressId != Guid.Empty)
+            try
             {
-                address = await _AdressRepo.FindAsync(x => x.Id == request.AddressId);
+                var cart = await _unitOfWork.Carts.FindAsync(x => x.UserId == userId
+            , include: "CartItems.Product", isTracked: true);
 
-                if (address == null || address.UserId != userId)
-                    throw new InvalidOperationException("Invalid address");
-            }
-            else if (request.NewAddress != null)
-            {
-                address = new Address
+                if (cart == null || !cart.CartItems.Any()) throw new EntityNotFoundException("Cart is empty");
+
+                Address? address;
+
+                if (request.AddressId != Guid.Empty)
+                {
+                    address = await _unitOfWork.Addresses.FindAsync(x => x.Id == request.AddressId);
+
+                    if (address == null || address.UserId != userId)
+                        throw new InvalidOperationException("Invalid address");
+                }
+                else if (request.NewAddress != null)
+                {
+
+                    address = new Address
+                    {
+                        Id = Guid.NewGuid(),
+                        Country = request.NewAddress.Country,
+                        City = request.NewAddress.City,
+                        Street = request.NewAddress.Street,
+                        Building = request.NewAddress.Building,
+                        PersonName = request.NewAddress.PersonName,
+                        Phone = request.NewAddress.Phone,
+                        UserId = userId
+                    };
+
+                    await _unitOfWork.Addresses.AddAsync(address);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Address is required");
+                }
+                var order = new Order
                 {
                     Id = Guid.NewGuid(),
-                    Country = request.NewAddress.Country,
-                    City = request.NewAddress.City,
-                    Street = request.NewAddress.Street,
-                    Building = request.NewAddress.Building,
-                    UserId = userId
+                    UserId = userId,
+                    CreatedAt = DateTime.UtcNow,
+                    Status = StatusOrder.Pending,
+                    AddressId = address.Id,
+                    PersonName = address.PersonName,
+                    Phone = address.Phone,
+                    ShippingCountry = address.Country,
+                    ShippingCity = address.City,
+                    ShippingStreet = address.Street,
+                    ShippingBuilding = address.Building,
+
+                    OrderItems = new List<OrderItem>()
                 };
 
-                await _AdressRepo.AddAsync(address);
+                decimal totalAmount = 0;
+
+                foreach (var item in cart.CartItems)
+                {
+                    if (item.Product.StockQuantity < item.Quantity)
+                        throw new InvalidOperationException($"Not enough stock for {item.Product.Name}");
+
+                    var orderItem = new OrderItem
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        UnitPrice = item.UnitPrice,
+                         Product = item.Product
+                    };
+
+                    totalAmount += orderItem.Quantity * orderItem.UnitPrice;
+
+                    order.OrderItems.Add(orderItem);
+
+                    item.Product.StockQuantity -= item.Quantity;
+
+                }
+
+                order.TotalAmount = totalAmount;
+
+                await _unitOfWork.Orders.AddAsync(order);
+
+                // Clear Cart
+                foreach (var item in cart.CartItems)
+                {
+                    await _unitOfWork.CartItems.DeleteByIdAsync(item.Id);
+                }
+
+               
+                await _unitOfWork.SaveAsync();
+                await _unitOfWork.CommitTransactionAsync();
+
+                return _mapper.Map<OrderResponse>(order);
+
             }
-            else
+            catch
             {
-                throw new InvalidOperationException("Address is required");
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+
             }
-            var order = new Order
+        }
+
+        public async Task<PagedResult<OrderResponse>> GetAllOrders(PaginationDTO paginationDTO)
+        {
+            var (items, totalCount) = await _unitOfWork.Orders
+        .GetAllAsync(
+            sortBy: paginationDTO.SortBy,
+            sortDirection: paginationDTO.sortDirection,
+            pageNumber: paginationDTO.Page,
+            pageSize: paginationDTO.Size,
+            include: "OrderItems.Product");
+
+            if (!items.Any())
+                throw new EntityNotFoundException("Order  Not found");
+
+            return new PagedResult<OrderResponse>
             {
-                Id = Guid.NewGuid(),
-                UserId = userId,
-                CreatedAt = DateTime.UtcNow,
-                Status = StatusOrder.Pending,
-
-                AddressId = address.Id,
-
-                // Snapshot
-                ShippingCountry = address.Country,
-                ShippingCity = address.City,
-                ShippingStreet = address.Street,
-                ShippingBuilding = address.Building,
-
-                OrderItems = new List<OrderItem>()
+                Items = _mapper.Map<IEnumerable<OrderResponse>>(items),
+                TotalCount = totalCount,
+                PageNumber = paginationDTO.Page,
+                PageSize = paginationDTO.Size,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)paginationDTO.Size)
             };
 
-            decimal totalAmount = 0;
-
-            foreach (var item in cart.CartItems)
-            {
-                if (item.Product.StockQuantity < item.Quantity)
-                    throw new InvalidOperationException($"Not enough stock for {item.Product.Name}");
-
-                var orderItem = new OrderItem
-                {
-                    Id = Guid.NewGuid(),
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    UnitPrice = item.UnitPrice
-                };
-
-                totalAmount += orderItem.Quantity * orderItem.UnitPrice;
-
-                order.OrderItems.Add(orderItem);
-
-                item.Product.StockQuantity -= item.Quantity;
-            }
-
-            order.TotalAmount = totalAmount;
-
-            await _orderRepository.AddAsync(order);
-
-            // Clear Cart
-            foreach (var item in cart.CartItems)
-            {
-                await _cartItemRepo.DeleteByIdAsync(item.Id);
-            }
-
-            await _unitOfWork.SaveAsync();
-
-            return _mapper.Map<OrderResponse>(order);
         }
 
-        public async Task<List<OrderResponse>> GetAllOrders()
-        {
-            var orders = await _orderRepo.GetAllOrdersAsync();
-            return _mapper.Map<List<OrderResponse>>(orders);
-
-        }
-
-        public async Task<List<OrderResponse>> GetOrderById()
+        public async Task<PagedResult<OrderResponse>> GetOrdersByUserId(PaginationDTO paginationDTO)
         {
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty) throw new InvalidIdException("OrderId cannot be empty.");
-            var order = await _orderRepo.GetOrderByUserIdAsync(userId);
 
-            if (order == null) throw new EntityNotFoundException("Order not found.");
+            var (items, totalCount) = await _unitOfWork.Orders
+            .WhereAsync(
+            predicate: o => o.UserId == userId,
+            sortBy: paginationDTO.SortBy,
+            sortDirection: paginationDTO.sortDirection,
+            pageNumber: paginationDTO.Page,
+            pageSize: paginationDTO.Size,
+            include: "OrderItems.Product");
 
-            return _mapper.Map<List<OrderResponse>>(order);
+            if (!items.Any())
+                throw new EntityNotFoundException("No Order found");
+
+            return new PagedResult<OrderResponse>
+            {
+                Items = _mapper.Map<IEnumerable<OrderResponse>>(items),
+                TotalCount = totalCount,
+                PageNumber = paginationDTO.Page,
+                PageSize = paginationDTO.Size,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)paginationDTO.Size)
+            };
         }
 
         public async Task<OrderResponse> GetOrderDetails(Guid orderId)
         {
             var userId = _currentUser.UserId;
             if (userId == Guid.Empty || orderId == Guid.Empty)
-                throw new ArgumentException("Invalid id");
+                throw new InvalidIdException("Invalid id");
 
-            var order = await _orderRepo.GetOrderDetailsAsync(orderId, userId);
+            var order = await _unitOfWork.Orders.FindAsync(x => x.UserId == userId
+             , include: "OrderItems.Product");
 
-            if (order == null)
+            if (order == null || !order.OrderItems.Any())
                 throw new EntityNotFoundException("Order not found");
 
             return _mapper.Map<OrderResponse>(order);
@@ -190,7 +236,8 @@ namespace E_Commerce.Core.Services
             if (orderId == Guid.Empty)
                 throw new ArgumentException("Invalid id");
 
-            var order = await _orderRepo.GetOrderByIdAsync(orderId);
+            var order = await _unitOfWork.Orders.FindAsync(x => x.Id == orderId, isTracked: true
+             , include: "OrderItems.Product");
 
             if (order == null)
                 throw new EntityNotFoundException("Order not found");

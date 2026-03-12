@@ -1,4 +1,6 @@
-﻿using E_Commerce.Core.DTO.ProductDTO;
+﻿using E_Commerce.Core.DTO;
+using E_Commerce.Core.DTO.ProductDTO;
+using E_Commerce.Core.Services;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +28,7 @@ namespace E_Commerce.API.Controllers
             var addedProduct = await _productsService.AddProduct(productAddRequest);
             return Ok(addedProduct);
         }
-
+         
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteProduct([FromRoute] Guid id)
@@ -44,22 +46,22 @@ namespace E_Commerce.API.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetProductsDeleted")]
-        public async Task<ActionResult> GetProductsDeleted()
+        public async Task<ActionResult> GetProductsDeleted([FromQuery] PaginationDTO paginationDTO)
         {
-            return Ok(await _productsService.GetDeletedProducts());
+            return Ok(await _productsService.GetDeletedProducts(paginationDTO));
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllProudct()
+        public async Task<IActionResult> GetAllProducts([FromQuery] PaginationDTO paginationDTO)
         {
-            _logger.LogInformation("GetAllProudct action Method of ProductController");
-            return Ok(await _productsService.GetAllProudcts());
+            var result = await _productsService.GetAllProducts(paginationDTO);
+            return Ok(result);
         }
 
         [HttpGet("ProudctsByoneCategory/{CategoryId:guid}")]
-        public async Task<ActionResult> GetAllProudctByCategoryId([FromRoute] Guid CategoryId)
+        public async Task<ActionResult> GetAllProudctByCategoryId([FromRoute] Guid CategoryId , [FromQuery] PaginationDTO paginationDTO)
         {
-            return Ok(await _productsService.GetAllProudctsByCategoryId(CategoryId));
+            return Ok(await _productsService.GetAllProudctsByCategoryId(CategoryId , paginationDTO));
         }
 
         [HttpGet("{ProudctId:guid}")]
@@ -78,9 +80,9 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpGet("Search")]
-        public async Task<ActionResult> Search(string keyword)
+        public async Task<ActionResult> Search([FromQuery] string keyword ,[FromQuery] PaginationDTO paginationDTO)
         {
-            return Ok(await _productsService.Search(keyword));
+            return Ok(await _productsService.Search(keyword , paginationDTO));
 
         }
     }

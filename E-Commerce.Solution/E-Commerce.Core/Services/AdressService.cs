@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.Domain.RepositoryContracts;
 using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.Exceptions;
@@ -9,24 +8,24 @@ namespace E_Commerce.Core.Services
 {
     public class AdressService : IAdressService
     {
-        private readonly IGenericRepository<Address> _adressRepo;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
-        public AdressService(IGenericRepository<Address> adressRepo, IMapper mapper
-            , ICurrentUserService currentUserService)
+        private readonly IUnitOfWork _unitOfWork;
+        public AdressService(IMapper mapper
+            , ICurrentUserService currentUserService, IUnitOfWork unitOfWork)
         {
-            _adressRepo = adressRepo;
             _mapper = mapper;
             _currentUserService = currentUserService;
+            _unitOfWork = unitOfWork;
         }
         public async Task<List<ResponseAdress>> GetAllAdressesAsync()
         {
             var userId = _currentUserService.UserId;
-            var Address =await _adressRepo.WhereAsync(x => x.UserId == userId);
+            var (Address,_) = await _unitOfWork.Addresses.WhereAsync(x => x.UserId == userId);
 
-            if(Address == null) throw new EntityNotFoundException($"Adress not found");
+            if (Address == null || !Address.Any()) throw new EntityNotFoundException($"Adress not found");
 
-           return _mapper.Map<List<ResponseAdress>>(Address);
+            return _mapper.Map<List<ResponseAdress>>(Address);
 
         }
     }

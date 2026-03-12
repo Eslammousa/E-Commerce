@@ -8,31 +8,22 @@ namespace E_Commerce.Core.Services
 {
     public class CartService : ICartService
     {
-        private readonly IGenericRepository<Cart> _cartRepo;
-        private readonly ICartRepositroy _cartRepositroy;
-        private readonly IGenericRepository<CartItem> _cartItemRepo;
-        private readonly IGenericRepository<Product> _productRepo;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
 
 
-        public CartService(IGenericRepository<Cart> cartRepo, IGenericRepository<CartItem> cartItemRepo,
-            IGenericRepository<Product> productRepo, IMapper mapper, IUnitOfWork unitOfWork, ICartRepositroy cartRepositroy, ICurrentUserService currentUserService)
+        public CartService(IMapper mapper, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
 
-            _cartRepo = cartRepo;
-            _cartItemRepo = cartItemRepo;
-            _productRepo = productRepo;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _cartRepositroy = cartRepositroy;
             _currentUserService = currentUserService;
         }
         public async Task<CartResponse> AddCart(CartAddRequest request)
         {
             //  Get Product
-            var product = await _productRepo.FindAsync(p => p.Id == request.ProductId);
+            var product = await _unitOfWork.Products.FindAsync(p => p.Id == request.ProductId);
             if (product == null)
                 throw new EntityNotFoundException($"Product with id {request.ProductId} not found");
 
@@ -44,8 +35,9 @@ namespace E_Commerce.Core.Services
 
             // 2️ Get Cart with Items with Product
             // Cart  -> CartItems -> Product
-                var userId = _currentUserService.UserId;
-            var cart = await _cartRepositroy.GetCartWithItemsAsync(userId);
+            var userId = _currentUserService.UserId;
+            var cart = await _unitOfWork.Carts.FindAsync(x => x.UserId == userId,
+                include: "CartItems.Product");
 
             // 3️ Create Cart if not exists
             if (cart == null)
@@ -57,7 +49,7 @@ namespace E_Commerce.Core.Services
                     CreatedAt = DateTime.UtcNow
                 };
 
-                await _cartRepo.AddAsync(cart);
+                await _unitOfWork.Carts.AddAsync(cart);
             }
 
             // 4️ Check if product already in cart
@@ -70,7 +62,7 @@ namespace E_Commerce.Core.Services
 
                 existingItem.Quantity += request.Quantity;
 
-                await _cartItemRepo.UpdateAsync(existingItem);
+                await _unitOfWork.CartItems.UpdateAsync(existingItem);
             }
             else
             {
@@ -83,14 +75,15 @@ namespace E_Commerce.Core.Services
                     UnitPrice = product.Price
                 };
 
-                await _cartItemRepo.AddAsync(newItem);
+                await _unitOfWork.CartItems.AddAsync(newItem);
             }
 
             // 5️ Save changes
             await _unitOfWork.SaveAsync();
 
             // 6️ Reload cart to ensure navigation properties loaded
-            cart = await _cartRepositroy.GetCartWithItemsAsync(userId);
+            //  cart = await _cartRepositroy.GetCartWithItemsAsync(userId);
+            cart = await _unitOfWork.Carts.FindAsync(x => x.UserId == userId, include: "CartItems.Product");
 
 
             //  Use AutoMapper
@@ -100,7 +93,7 @@ namespace E_Commerce.Core.Services
         public async Task<CartResponse> GetCartByUserId()
         {
             var userId = _currentUserService.UserId;
-            var cart = await _cartRepositroy.GetCartWithItemsAsync(userId);
+            var cart = await _unitOfWork.Carts.FindAsync(x => x.UserId == userId, include: "CartItems.Product");
 
             if (cart == null)
             {
@@ -121,12 +114,9 @@ namespace E_Commerce.Core.Services
             if (quantity <= 0)
                 throw new InvalidQuantityException("Quantity must be greater than zero");
 
-            var cartItem = await _cartItemRepo.FindAsync(
-                ci => ci.Id == cartItemId
-                ,false,
-                ci => ci.Product,
-                ci => ci.Cart
-            );
+            var cartItem = await _unitOfWork.CartItems.FindAsync(
+                        ci => ci.Id == cartItemId,
+                        include: "Product,Cart");
 
             if (cartItem == null)
                 throw new EntityNotFoundException($"CartItem with id {cartItemId} not found");
@@ -139,21 +129,19 @@ namespace E_Commerce.Core.Services
 
             cartItem.Quantity = quantity;
 
-            await _cartItemRepo.UpdateAsync(cartItem);
+            await _unitOfWork.CartItems.UpdateAsync(cartItem);
             await _unitOfWork.SaveAsync();
 
-            var cart = await _cartRepositroy.GetCartWithItemsAsync(userId);
+            var cart = await _unitOfWork.Carts.FindAsync(x => x.UserId == userId, include: "CartItems.Product");
 
             return _mapper.Map<CartResponse>(cart);
         }
 
         public async Task<bool> RemoveFromCart(Guid cartItemId)
         {
-            var cartItem = await _cartItemRepo.FindAsync(
-                ci => ci.Id == cartItemId,
-                false,
-                ci => ci.Cart
-            );
+            var cartItem = await _unitOfWork.CartItems.FindAsync(
+                 ci => ci.Id == cartItemId,
+                 include: "Cart");
 
             if (cartItem == null)
                 throw new EntityNotFoundException($"CartItem with id {cartItemId} not found");
@@ -163,7 +151,7 @@ namespace E_Commerce.Core.Services
             if (cartItem.Cart.UserId != userId)
                 throw new UnauthorizedAccessException("You cannot delete this cart item");
 
-            await _cartItemRepo.DeleteByIdAsync(cartItemId);
+            await _unitOfWork.CartItems.DeleteByIdAsync(cartItemId);
             await _unitOfWork.SaveAsync();
 
             return true;
@@ -172,12 +160,12 @@ namespace E_Commerce.Core.Services
         public async Task<bool> ClearCart()
         {
             var userId = _currentUserService.UserId;
-            var cart = await _cartRepositroy.GetCartWithItemsAsync(userId);
+            var cart = await _unitOfWork.Carts.FindAsync(x => x.UserId == userId, include: "CartItems.Product");
             if (cart == null)
                 throw new EntityNotFoundException($"Cart for user with id {userId} not found");
             foreach (var item in cart.CartItems)
             {
-                await _cartItemRepo.DeleteByIdAsync(item.Id);
+                await _unitOfWork.CartItems.DeleteByIdAsync(item.Id);
             }
             await _unitOfWork.SaveAsync();
             return true;

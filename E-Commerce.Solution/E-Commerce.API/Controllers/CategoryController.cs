@@ -1,4 +1,5 @@
-﻿using E_Commerce.Core.DTO.CategoryDTO;
+﻿using E_Commerce.Core.DTO;
+using E_Commerce.Core.DTO.CategoryDTO;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllCategories()
+        public async Task<ActionResult> GetAllCategories([FromQuery] PaginationDTO paginationDTO)
         {
-            var result =  await _categoriesService.GetAllCategories();
+            var result =  await _categoriesService.GetAllCategories(paginationDTO);
             return Ok(result);
         }
 

@@ -1,4 +1,6 @@
-﻿using E_Commerce.Core.Domain.Enums;
+﻿using E_Commerce.Core.Common;
+using E_Commerce.Core.Domain.Enums;
+using E_Commerce.Core.DTO;
 using E_Commerce.Core.DTO.AdressDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 
@@ -6,17 +8,17 @@ namespace E_Commerce.Core.ServicesContracts
 {
     public interface IOrderService
     {
-        public Task<OrderResponse>Checkout(CheckoutDto request);
+         Task<OrderResponse>Checkout(CheckoutDto request);
 
-        public Task<List<OrderResponse>> GetOrderById();
+         Task<PagedResult<OrderResponse>> GetOrdersByUserId(PaginationDTO paginationDTO);
 
-        public Task<OrderResponse>GetOrderDetails(Guid orderId);
+         Task<OrderResponse>GetOrderDetails(Guid orderId);
 
-        public Task<List<OrderResponse>> GetAllOrders();
+         Task<PagedResult<OrderResponse>> GetAllOrders(PaginationDTO paginationDTO);
 
-        public Task<OrderResponse> CancelOrder(Guid orderId);
+         Task<OrderResponse> CancelOrder(Guid orderId);
 
-        public Task<OrderResponse> UpdateOrderStatus(Guid orderId , StatusOrder statusOrder);
+         Task<OrderResponse> UpdateOrderStatus(Guid orderId , StatusOrder statusOrder);
 
 
 

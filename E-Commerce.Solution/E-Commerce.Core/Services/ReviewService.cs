@@ -11,27 +11,23 @@ namespace E_Commerce.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IGenericRepository<Review> _reviewRepository;
-        private readonly IGenericRepository<Product> _ProudctRepo;
         private readonly ICurrentUserService _currentUserService;
-        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepository<Review> reviewRepository
-            , ICurrentUserService currentUserService, IGenericRepository<Product> proudctRepo)
+        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper
+            , ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _reviewRepository = reviewRepository;
             _currentUserService = currentUserService;
-            _ProudctRepo = proudctRepo;
         }
         public async Task<ReviewResponse> AddReviewAsync(Guid ProductId, ReviewAddRequest reviewAddRequest)
         {
             var userId = _currentUserService.UserId;
 
-            var product = await _ProudctRepo.FindAsync(x => x.Id == ProductId);
+            var product = await _unitOfWork.Products.FindAsync(x => x.Id == ProductId, isTracked: true);
             if (product == null) throw new EntityNotFoundException("Product not found");
 
 
-            var existingReview = await _reviewRepository.FindAsync(x => x.UserId == userId && x.ProductId == ProductId);
+            var existingReview = await _unitOfWork.Reviews.FindAsync(x => x.UserId == userId && x.ProductId == ProductId);
             if (existingReview != null) throw new InvalidOperationException("User has already reviewed this product");
 
             var review = _mapper.Map<Review>(reviewAddRequest);
@@ -45,11 +41,12 @@ namespace E_Commerce.Core.Services
 
             product.AvgRating = ((oldAverage * oldCount) + review.Rating) / product.ReviewCount;
 
-            await _reviewRepository.AddAsync(review);
+            await _unitOfWork.Reviews.AddAsync(review);
+            await _unitOfWork.Products.UpdateAsync(product);
             await _unitOfWork.SaveAsync();
 
-            var existingReviewWithUser = await _reviewRepository.FindAsync
-                (x => x.Id == review.Id, false,  x => x.User);
+            var existingReviewWithUser = await _unitOfWork.Reviews.FindAsync
+                (x => x.Id == review.Id, include: "User");
 
 
             return _mapper.Map<ReviewResponse>(existingReviewWithUser);
@@ -61,7 +58,7 @@ namespace E_Commerce.Core.Services
             if (reviewId == Guid.Empty)
                 throw new InvalidIdException("Invalid review ID");
 
-            var review = await _reviewRepository.FindAsync(x => x.Id == reviewId);
+            var review = await _unitOfWork.Reviews.FindAsync(x => x.Id == reviewId);
 
             if (review == null)
                 throw new EntityNotFoundException("Review not found");
@@ -71,7 +68,8 @@ namespace E_Commerce.Core.Services
             if (review.UserId != userId)
                 throw new UnauthorizedAccessException("You are not authorized to delete this review");
 
-            var product = await _ProudctRepo.FindAsync(x => x.Id == review.ProductId ,false, x=>x.Reviews);
+            var product = await _unitOfWork.Products.FindAsync(x => x.Id == review.ProductId, isTracked: true, include: "Reviews");
+
 
             if (product != null)
             {
@@ -91,7 +89,10 @@ namespace E_Commerce.Core.Services
                 }
             }
 
-            await _reviewRepository.DeleteByIdAsync(reviewId);
+            if (product == null)
+                throw new EntityNotFoundException("Associated product not found");
+
+            await _unitOfWork.Reviews.DeleteByIdAsync(reviewId);
 
             await _unitOfWork.SaveAsync();
 

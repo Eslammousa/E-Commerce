@@ -51,6 +51,13 @@ namespace E_Commerce.Infrastructure.Data.Config
                    .HasMaxLength(50)
                    .IsRequired();
 
+            builder.Property(x => x.PersonName)
+                 .HasMaxLength(100)
+                .IsRequired();
+
+            builder.Property(x => x.Phone)
+                .HasMaxLength(11)
+                .IsRequired();
 
         }
     }

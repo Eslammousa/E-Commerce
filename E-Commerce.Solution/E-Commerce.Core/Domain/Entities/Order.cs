@@ -15,6 +15,10 @@ namespace E_Commerce.Core.Domain.Entities
 
         public Guid AddressId { get; set; }
         public Address Address { get; set; } = null!;
+
+        public string PersonName { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+
         public string ShippingCountry { get; set; } = null!;
         public string ShippingCity { get; set; } = null!;
         public string ShippingStreet { get; set; } = null!;

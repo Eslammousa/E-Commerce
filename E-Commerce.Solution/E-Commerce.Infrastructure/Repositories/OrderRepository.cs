@@ -18,6 +18,7 @@ namespace E_Commerce.Infrastructure.Repositories
             return await _db.Orders
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
+                .AsSplitQuery()
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }

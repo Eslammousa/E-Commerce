@@ -10,6 +10,14 @@ namespace E_Commerce.Infrastructure.Data.Config
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x=>x.PersonName)
+                 .HasMaxLength(50)
+                .IsRequired();
+
+            builder.Property(x=>x.Phone)
+                .HasMaxLength(11)
+                .IsRequired();
+
             builder.Property(x => x.Country)
                 .HasMaxLength(100)
                 .IsRequired();

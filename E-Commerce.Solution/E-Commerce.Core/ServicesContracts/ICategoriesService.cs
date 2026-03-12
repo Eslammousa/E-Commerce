@@ -1,4 +1,6 @@
-﻿using E_Commerce.Core.DTO.CategoryDTO;
+﻿using E_Commerce.Core.Common;
+using E_Commerce.Core.DTO;
+using E_Commerce.Core.DTO.CategoryDTO;
 
 namespace E_Commerce.Core.ServicesContracts
 {
@@ -12,7 +14,7 @@ namespace E_Commerce.Core.ServicesContracts
 
         Task<CategoryResponse> GetCategoryById(Guid categoryId);
 
-        Task<IEnumerable<CategoryResponse>> GetAllCategories();
+        Task<PagedResult<CategoryResponse>> GetAllCategories(PaginationDTO paginationDTO);
 
     }
 }

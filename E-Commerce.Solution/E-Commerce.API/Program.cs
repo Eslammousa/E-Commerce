@@ -46,10 +46,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
-builder.Services.AddScoped<IProudctRepository, ProudctRepository>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 
-builder.Services.AddScoped<ICartRepositroy, CartRepository>();
 
 builder.Services.AddScoped<ICartService, CartService>();
 
@@ -73,6 +71,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 builder.Services.AddScoped<IImageService, ImageService>();
+
+// ?? Program.cs
+builder.Services.AddSingleton(cfg => cfg); // ?
 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
