@@ -13,6 +13,7 @@ namespace E_Commerce.Core.Domain.RepositoryContracts
         IGenericRepository<OrderItem> OrderItems { get; }
         IGenericRepository<Address> Addresses { get; }
         IGenericRepository<Review> Reviews { get; }
+        IGenericRepository<WishList> WishLists { get; }
 
 
         Task<int> SaveAsync();

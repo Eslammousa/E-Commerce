@@ -24,6 +24,8 @@ namespace E_Commerce.Infrastructure.Repositories
 
         public IGenericRepository<Review> Reviews { get; private set; }
 
+        public IGenericRepository<WishList> WishLists { get; private set; }
+
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -36,7 +38,7 @@ namespace E_Commerce.Infrastructure.Repositories
             OrderItems = new GenericRepository<OrderItem>(_context);
             Addresses = new GenericRepository<Address>(_context);
             Reviews = new GenericRepository<Review>(_context);
-
+            WishLists = new GenericRepository<WishList>(_context);
         }
 
         public void Dispose()

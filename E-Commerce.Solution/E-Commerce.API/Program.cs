@@ -51,14 +51,14 @@ builder.Services.AddScoped<IProductsService, ProductsService>();
 
 builder.Services.AddScoped<ICartService, CartService>();
 
-
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<IAdressService, AdressService>();
 
 builder.Services.AddScoped<IReviewService, ReviewService>();
+
+builder.Services.AddScoped<IWishListService, WishListService>();
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();

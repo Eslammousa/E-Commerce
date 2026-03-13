@@ -17,6 +17,9 @@ namespace E_Commerce.Infrastructure.Data.DBContext
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<WishList> wishLists { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

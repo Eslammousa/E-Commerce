@@ -5,6 +5,7 @@ using E_Commerce.Core.DTO.CategoryDTO;
 using E_Commerce.Core.DTO.OrderDTO;
 using E_Commerce.Core.DTO.ProductDTO;
 using E_Commerce.Core.DTO.ReviewDTO;
+using E_Commerce.Core.DTO.WishlistDTO;
 
 namespace E_Commerce.Core.Mapping
 {
@@ -72,6 +73,15 @@ namespace E_Commerce.Core.Mapping
             CreateMap<Review, ReviewResponse>()
                 .ForMember(dest => dest.UserName,
                     opt => opt.MapFrom(src => src.User.PersonName));
+
+
+            CreateMap<WishList, WishlistResponse>()
+                .ForMember(dest => dest.ProductName,
+                    opt => opt.MapFrom(src => src.product.Name))
+                .ForMember(dest => dest.ProductPrice,
+                    opt => opt.MapFrom(src => src.product.Price))
+                .ForMember(dest => dest.ProductImage,
+                    opt => opt.MapFrom(src => src.product.Image));
 
 
 
