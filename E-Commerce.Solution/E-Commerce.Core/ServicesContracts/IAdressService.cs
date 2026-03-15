@@ -1,10 +1,12 @@
-﻿using E_Commerce.Core.DTO.AdressDTO;
+﻿using E_Commerce.Core.Common;
+using E_Commerce.Core.DTO;
+using E_Commerce.Core.DTO.AdressDTO;
 
 namespace E_Commerce.Core.ServicesContracts
 {
     public interface IAdressService
     {
-       Task<List<ResponseAdress>> GetAllAdressesAsync();
+        Task<PagedResult<ResponseAdress>> GetAllAdressesAsync(PaginationDTO paginationDTO);
        
     }
 }

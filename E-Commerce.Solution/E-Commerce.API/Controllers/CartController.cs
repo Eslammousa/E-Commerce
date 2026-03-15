@@ -1,9 +1,8 @@
-﻿using E_Commerce.Core.DTO.CartDTO;
-using E_Commerce.Core.Services;
+﻿using E_Commerce.Core.DTO;
+using E_Commerce.Core.DTO.CartDTO;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace E_Commerce.API.Controllers
 {
@@ -14,7 +13,7 @@ namespace E_Commerce.API.Controllers
     {
         private readonly ICartService _cartService;
 
-        public CartController(ICartService cartService )
+        public CartController(ICartService cartService)
         {
             _cartService = cartService;
         }
@@ -22,11 +21,19 @@ namespace E_Commerce.API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddToCart([FromBody] CartAddRequest request)
         {
-           
+
 
             var result = await _cartService.AddCart(request);
 
-            return Ok(result);
+            var response = new ApiResponse<CartResponse>
+            {
+                Success = true,
+                Message = "Product added to cart successfully",
+                Data = result
+            };
+            return Ok(response);
+
+
         }
 
         [HttpGet]
@@ -34,24 +41,43 @@ namespace E_Commerce.API.Controllers
         {
             var result = await _cartService.GetCartByUserId();
 
-            return Ok(result);
+            var response = new ApiResponse<CartResponse>
+            {
+                Success = true,
+                Message = "Cart retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
+
         }
 
         [HttpDelete("{cartItemId:guid}")]
         public async Task<ActionResult> DeleteCartItem([FromRoute] Guid cartItemId)
         {
 
-            await _cartService.RemoveFromCart(cartItemId);
+            var result = await _cartService.RemoveFromCart(cartItemId);
 
-            return NoContent();
+            var response = new ApiResponse<bool>
+            {
+                Success = result,
+                Message = result ? "Cart item removed successfully" : "Failed to remove cart item",
+            };
+            return Ok(response);
+
         }
 
         [HttpPut("{cartItemId:guid}")]
         public async Task<ActionResult> UpdateCartItem([FromRoute] Guid cartItemId, [FromBody] UpdateCartItemRequest request)
         {
-         
             var result = await _cartService.EditCartItem(cartItemId, request.Quantity);
-            return Ok(result);
+
+            var response = new ApiResponse<CartResponse>
+            {
+                Success = true,
+                Message = "Cart item updated successfully",
+                Data = result
+            };
+            return Ok(response);
         }
     }
 }

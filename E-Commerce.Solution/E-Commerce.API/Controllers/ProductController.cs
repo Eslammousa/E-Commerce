@@ -1,6 +1,6 @@
-﻿using E_Commerce.Core.DTO;
+﻿using E_Commerce.Core.Common;
+using E_Commerce.Core.DTO;
 using E_Commerce.Core.DTO.ProductDTO;
-using E_Commerce.Core.Services;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ namespace E_Commerce.API.Controllers
     {
         private readonly IProductsService _productsService;
         private readonly ILogger<ProductController> _logger;
-        public ProductController(IProductsService productsService , ILogger<ProductController> logger)
+        public ProductController(IProductsService productsService, ILogger<ProductController> logger)
         {
             _productsService = productsService;
             _logger = logger;
@@ -25,10 +25,17 @@ namespace E_Commerce.API.Controllers
         public async Task<ActionResult> AddProduct([FromForm] ProductAddRequest productAddRequest)
         {
 
-            var addedProduct = await _productsService.AddProduct(productAddRequest);
-            return Ok(addedProduct);
-        }
+            var result = await _productsService.AddProduct(productAddRequest);
+            var response = new ApiResponse<ProductResponse>
+            {
+                Success = true,
+                Message = "Products Added successfully",
+                Data = result
+            };
+            return Ok(response);
          
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteProduct([FromRoute] Guid id)
@@ -41,33 +48,63 @@ namespace E_Commerce.API.Controllers
         [HttpPost("{id:guid}")]
         public async Task<ActionResult> RestoreProduct([FromRoute] Guid id)
         {
-             await _productsService.RestoreProduct(id);
+            await _productsService.RestoreProduct(id);
             return NoContent();
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetProductsDeleted")]
         public async Task<ActionResult> GetProductsDeleted([FromQuery] PaginationDTO paginationDTO)
         {
-            return Ok(await _productsService.GetDeletedProducts(paginationDTO));
+            var result = await _productsService.GetDeletedProducts(paginationDTO);
+
+            var response = new ApiResponse<PagedResult<ProductResponse>>
+            {
+                Success = true,
+                Message = "Products retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts([FromQuery] PaginationDTO paginationDTO)
+        public async Task<ActionResult> GetAllProducts([FromQuery] PaginationDTO paginationDTO)
         {
             var result = await _productsService.GetAllProducts(paginationDTO);
-            return Ok(result);
+
+            var response = new ApiResponse<PagedResult<ProductResponse>>
+            {
+                Success = true,
+                Message = "Products retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [HttpGet("ProudctsByoneCategory/{CategoryId:guid}")]
-        public async Task<ActionResult> GetAllProudctByCategoryId([FromRoute] Guid CategoryId , [FromQuery] PaginationDTO paginationDTO)
+        public async Task<ActionResult> GetAllProudctByCategoryId([FromRoute] Guid CategoryId, [FromQuery] PaginationDTO paginationDTO)
         {
-            return Ok(await _productsService.GetAllProudctsByCategoryId(CategoryId , paginationDTO));
+            var result = await _productsService.GetAllProudctsByCategoryId(CategoryId, paginationDTO);
+
+            var response = new ApiResponse<PagedResult<ProductResponse>>
+            {
+                Success = true,
+                Message = "Products retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [HttpGet("{ProudctId:guid}")]
-        public async Task<ActionResult> GetProductByProudctId([FromRoute]  Guid ProudctId)
+        public async Task<ActionResult> GetProductByProudctId([FromRoute] Guid ProudctId)
         {
-            return Ok(await _productsService.GetProductByProductId(ProudctId));
+           var result = await _productsService.GetProductByProductId(ProudctId);
+            var response = new ApiResponse<ResponseProductWithReview>
+            {
+                Success = true,
+                Message = "Product retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [Authorize(Roles = "Admin")]
@@ -80,9 +117,9 @@ namespace E_Commerce.API.Controllers
         }
 
         [HttpGet("Search")]
-        public async Task<ActionResult> Search([FromQuery] string keyword ,[FromQuery] PaginationDTO paginationDTO)
+        public async Task<ActionResult> Search([FromQuery] string keyword, [FromQuery] PaginationDTO paginationDTO)
         {
-            return Ok(await _productsService.Search(keyword , paginationDTO));
+            return Ok(await _productsService.Search(keyword, paginationDTO));
 
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using E_Commerce.Core.Caching;
 using E_Commerce.Core.Common;
 using E_Commerce.Core.Domain.Entities;
 using E_Commerce.Core.Domain.RepositoryContracts;
@@ -14,14 +15,16 @@ namespace E_Commerce.Core.Services
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+            private readonly ICacheService _cache;
 
         public ProductsService(IImageService imageService
-            , IMapper mapper, IUnitOfWork unitOfWork)
+            , IMapper mapper, IUnitOfWork unitOfWork , ICacheService cache)
         {
 
             _imageService = imageService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _cache = cache;
         }
 
         public async Task<ProductResponse> AddProduct(ProductAddRequest productAddRequest)
@@ -48,12 +51,17 @@ namespace E_Commerce.Core.Services
         {
             if (Id == Guid.Empty) throw new InvalidIdException($"Id {Id} Can't be Empty");
 
-            var proudct = await _unitOfWork.Products.FindAsync(x => x.Id == Id, true);
+            var product = await _unitOfWork.Products.FindAsync(x => x.Id == Id, true);
 
-            if (proudct == null) throw new EntityNotFoundException($"Product with id {Id} not found");
+            if (product == null) throw new EntityNotFoundException($"Product with id {Id} not found");
 
-            proudct.IsDeleted = true;
+            product.IsDeleted = true;
             await _unitOfWork.SaveAsync();
+
+            _cache.Remove(CacheKeys.ProductById(Id));
+            _cache.Remove(CacheKeys.ProductsAll);
+            if (product is not null)
+                _cache.RemoveByPrefix($"products:cat:{product.CategoryId}");
 
             return true;
 
@@ -61,6 +69,12 @@ namespace E_Commerce.Core.Services
 
         public async Task<PagedResult<ProductResponse>> GetAllProducts(PaginationDTO paginationDTO)
         {
+            var cacheKey = $"products:page:{paginationDTO.Page}:size:{paginationDTO.Size}:sort:{paginationDTO.SortBy}:{paginationDTO.sortDirection}";
+
+            var cachedData = _cache.Get<PagedResult<ProductResponse>>(cacheKey);
+            if (cachedData != null)
+                return cachedData;
+
             var (items, totalCount) = await _unitOfWork.Products
                 .GetAllAsync(
                     sortBy: paginationDTO.SortBy,
@@ -69,10 +83,7 @@ namespace E_Commerce.Core.Services
                     pageSize: paginationDTO.Size,
                     include: "Category");
 
-            if (!items.Any())
-                throw new EntityNotFoundException("No products found");
-
-            return new PagedResult<ProductResponse>
+            var result =  new PagedResult<ProductResponse>
             {
                 Items = _mapper.Map<IEnumerable<ProductResponse>>(items),
                 TotalCount = totalCount,
@@ -80,6 +91,9 @@ namespace E_Commerce.Core.Services
                 PageSize = paginationDTO.Size,
                 TotalPages = (int)Math.Ceiling(totalCount / (double)paginationDTO.Size)
             };
+            _cache.Set(cacheKey, result, TimeSpan.FromMinutes(10));
+
+            return result;
         }
 
         public async Task<PagedResult<ProductResponse>> GetAllProudctsByCategoryId(Guid categoryId, PaginationDTO paginationDTO)
@@ -99,8 +113,7 @@ namespace E_Commerce.Core.Services
                   pageNumber: paginationDTO.Page,
                   pageSize: paginationDTO.Size,
                   include: "Category");
-            if (!items.Any())
-                throw new EntityNotFoundException("No products found");
+            
 
             return new PagedResult<ProductResponse>
             {
@@ -139,15 +152,20 @@ namespace E_Commerce.Core.Services
 
         public async Task<ResponseProductWithReview> GetProductByProductId(Guid id)
         {
+
+            var key = CacheKeys.ProductById(id);
+            var cached = _cache.Get<ResponseProductWithReview>(key);
+            if (cached is not null) return cached;
+
             if (id == Guid.Empty) throw new InvalidIdException($"Id {id} Can't be Empty");
 
-            var proudct = await _unitOfWork.Products.FindAsync(x => x.Id == id
+            var product = await _unitOfWork.Products.FindAsync(x => x.Id == id
             , include: "Reviews.User");
+            if (product == null) throw new EntityNotFoundException($"Product with id {id} not found");
+               
+            _cache.Set(key, product, TimeSpan.FromMinutes(10));
 
-
-            if (proudct == null) throw new EntityNotFoundException($"Product with id {id} not found");
-
-            return _mapper.Map<ResponseProductWithReview>(proudct);
+            return _mapper.Map<ResponseProductWithReview>(product);
         }
 
         public async Task<ProductResponse> GetProductByProductName(string name)

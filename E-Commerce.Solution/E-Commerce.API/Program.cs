@@ -1,5 +1,6 @@
 using E_Commerce.API.Middlewares;
 using E_Commerce.API.Services;
+using E_Commerce.Core.Caching;
 using E_Commerce.Core.Domain.IdentityEntities;
 using E_Commerce.Core.Domain.RepositoryContracts;
 using E_Commerce.Core.Mapping;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 
 builder.Services.AddScoped<IWishListService, WishListService>();
 
+builder.Services.AddScoped<ICacheService, MemoryCacheService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -138,6 +140,8 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

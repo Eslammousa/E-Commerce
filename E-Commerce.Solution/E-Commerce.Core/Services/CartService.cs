@@ -152,9 +152,10 @@ namespace E_Commerce.Core.Services
                 throw new UnauthorizedAccessException("You cannot delete this cart item");
 
             await _unitOfWork.CartItems.DeleteByIdAsync(cartItemId);
-            await _unitOfWork.SaveAsync();
 
-            return true;
+            return await _unitOfWork.SaveAsync() > 0;
+
+
         }
 
         public async Task<bool> ClearCart()

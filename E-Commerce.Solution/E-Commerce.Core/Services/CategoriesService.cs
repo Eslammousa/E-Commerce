@@ -51,9 +51,6 @@ namespace E_Commerce.Core.Services
                      pageNumber: paginationDTO.Page,
                      pageSize: paginationDTO.Size);
 
-            if (!items.Any())
-                throw new EntityNotFoundException("No Category found");
-
             return new PagedResult<CategoryResponse>
             {
                 Items = _mapper.Map<IEnumerable<CategoryResponse>>(items),

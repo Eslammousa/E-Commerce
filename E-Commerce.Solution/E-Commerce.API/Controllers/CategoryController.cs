@@ -1,8 +1,10 @@
-﻿using E_Commerce.Core.DTO;
+﻿using E_Commerce.Core.Common;
+using E_Commerce.Core.DTO;
 using E_Commerce.Core.DTO.CategoryDTO;
 using E_Commerce.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace E_Commerce.API.Controllers
 {
@@ -20,13 +22,28 @@ namespace E_Commerce.API.Controllers
         public async Task<ActionResult> GetAllCategories([FromQuery] PaginationDTO paginationDTO)
         {
             var result =  await _categoriesService.GetAllCategories(paginationDTO);
-            return Ok(result);
+           
+            var response = new ApiResponse<PagedResult<CategoryResponse>>
+            {
+                Success = true,
+                Message = "Categories retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [HttpGet("{categoryId:guid}")]
         public async Task<ActionResult> GetCategoryById([FromRoute] Guid categoryId)
         { 
-            return Ok(await _categoriesService.GetCategoryById(categoryId));
+            var result  = await _categoriesService.GetCategoryById(categoryId);
+
+            var response = new ApiResponse<CategoryResponse>
+            {
+                Success = true,
+                Message = "Category retrieved successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [Authorize(Roles = "Admin")]
@@ -35,7 +52,14 @@ namespace E_Commerce.API.Controllers
         public async Task<ActionResult> AddCategory([FromForm]CategoryAddRequest categoryAddRequest)
         {
             var result = await _categoriesService.AddCategory(categoryAddRequest);
-             return Ok(result);
+             
+            var response = new ApiResponse<CategoryResponse>
+            {
+                Success = true,
+                Message = "Category added successfully",
+                Data = result
+            };
+            return CreatedAtAction(nameof(GetCategoryById), new { categoryId = result.Id }, response);
         }
 
         [Authorize(Roles = "Admin")]
@@ -44,15 +68,29 @@ namespace E_Commerce.API.Controllers
         public async Task<ActionResult> UpdateCategory([FromRoute] Guid categoryId, [FromForm] CategoryUpdateRequest categoryUpdateRequest)
         {
             var result = await _categoriesService.UpdateCategory(categoryId ,categoryUpdateRequest);
-            return Ok(result);
+            
+            var response = new ApiResponse<CategoryResponse>
+            {
+                Success = true,
+                Message = "Category updated successfully",
+                Data = result
+            };
+            return Ok(response);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{categoryId:guid}")]
         public async Task<ActionResult> DeleteCategoryById([FromRoute] Guid categoryId)
         {
-            await _categoriesService.DeleteCategoryById(categoryId);
-            return NoContent();
+            var result  = await _categoriesService.DeleteCategoryById(categoryId);
+            
+            var response = new ApiResponse<bool>
+            {
+                Success = result,
+                Message = result ? "Category deleted successfully" : "Failed to delete category",
+                Data = result
+            };
+            return Ok(response);
         }
     }
 }
